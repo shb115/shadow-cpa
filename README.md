@@ -78,8 +78,10 @@ Before each acquisition the capture script resets the clock phase until the trac
 clipping. This high-amplitude phase was measured to give about six times the signal-to-noise
 ratio of an arbitrary phase, and the three unprotected trace sets record it in their
 `phase` field as `seekclip`. The masked sets were acquired separately and carry no
-`phase` field. The script also verifies the target against the reference implementation with a
-known-answer test before capturing, so a wrong key or a broken build is detected up front.
+`phase` field. The acquisition script for the masked sets is not included in this repository;
+`capture/capture_exp.py` covers the three unprotected acquisitions only. The script also
+verifies the target against the reference implementation with a known-answer test before
+capturing, so a wrong key or a broken build is detected up front.
 
 All firmware is built at optimisation level `-O0`. This is deliberate. At `-O0` every
 intermediate value is written to stack memory on each operation, which produces the strong
@@ -204,10 +206,16 @@ is attacked only as a cross-check. The correct-key correlation is between 0.79 a
 these twelve. `results/RESULTS_shadow32_12500.md` lists the peak correlation and the peak
 sample of each.
 
+The script also over-searches on purpose: its `key8` helper runs full 256-candidate CPAs on
+Rounds 1 and 2 where the attack itself needs 128 or 16 candidates, because the same run draws
+the paired 128-candidate and 256-candidate figures and cross-checks every key-schedule
+relation. The attack cost reported in the paper is 768 key guesses, namely five 7-bit CPAs on
+the Round-1 subkeys plus eight 4-bit CPAs on the remaining nibbles.
+
 Shadow-32, ten keys. All ten sets are recovered in full, with correct-key correlations between
 0.78 and 0.91 across the 120 subkeys taken by CPA. Each Round-1 subkey reaches a success rate
-of 1.0 at about 100 traces and all sixteen round-key bytes at about 500, while the guessing
-entropy reaches one at about 50. The true master key
+of 1.0 at about 100 traces and all sixteen round-key bytes at about 500, and the guessing
+entropy reaches one at the same 100 traces. The true master key
 lies in the NX-equivalence class obtained by inverting the key schedule in every set. The
 class is not a singleton because the NX module is not injective — its size ranges from 24 to
 81 here — but every member of it produces the same round keys.

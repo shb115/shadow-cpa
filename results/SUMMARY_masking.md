@@ -1,86 +1,86 @@
-# Shadow32 마스킹 부채널 분석 — masking_ISW vs masking_ISWLUT
+# Shadow32 masked side-channel analysis: masking_ISW vs masking_ISWLUT
 
-- **대상**: ChipWhisperer-Nano (STM32F030F4, Cortex-M0), Shadow32 1라운드
-- **측정**: 각 버전 **고정 4096 + 랜덤 4096 = 8192 트레이스**, `samples=10000`, `clkout=adc_freq=7.5MHz`, `clk_src=int`, **-O0**
-- **평문**: `pt[0:4]` (고정군만 고정), 마스크/난수 `pt[4:20]`은 양군 모두 랜덤
+- **Target**: ChipWhisperer-Nano (STM32F030F4, Cortex-M0), Shadow32 round 1
+- **Acquisition**: **4096 fixed + 4096 random = 8192 traces** per version, `samples=10000`, `clkout=adc_freq=7.5MHz`, `clk_src=int`, **-O0**
+- **Plaintext**: `pt[0:4]` (fixed in the fixed group only), the masks and randomness `pt[4:20]` are random in both groups
 
-## 두 버전
+## The two versions
 
-| 구현 | AND 구현 | 대책 |
+| Implementation | AND construction | Countermeasure |
 |---|---|---|
-| `masking_ISW` | **산술 ISW** AND | 없음 (refresh만) |
-| `masking_ISWLUT` | **ISW LUT** AND (마스킹 테이블 룩업) | **레지스터/버스 세척** |
+| `masking_ISW` | **arithmetic ISW** AND | none (refresh only) |
+| `masking_ISWLUT` | **ISW LUT** AND (masked table lookup) | **register and bus overwriting** |
 
-## 결과 요약 (4096/셋)
+## Result summary (4096 per set)
 
-| 지표 | masking_ISW (산술) | masking_ISWLUT (LUT+세척) |
+| Metric | masking_ISW (arithmetic) | masking_ISWLUT (LUT + overwriting) |
 |---|---|---|
 | **TVLA** max\|t\| | **13.46** | **3.61** |
-| **TVLA** \|t\|>4.5 초과 | **18** (누설) | **0** (통과) |
-| **CPA HW** 정답키 랭크 | 133 / 256 (미복구) | 170 / 256 (미복구) |
-| **CPA HD** 정답키 랭크 | 208 / 256 (미복구) | 112 / 256 (미복구) |
-| 상태 l0 상관 | 0.187 | 0.056 (잡음) |
-| 상태 r0 상관 | 0.210 (누설) | 0.044 (잡음) |
-| 키 s0 상관 | 0.062 (잡음) | 0.054 (잡음) |
+| **TVLA** samples with \|t\|>4.5 | **18** (leakage) | **0** (pass) |
+| **CPA HW** correct-key rank | 133 / 256 (not recovered) | 170 / 256 (not recovered) |
+| **CPA HD** correct-key rank | 208 / 256 (not recovered) | 112 / 256 (not recovered) |
+| state l0 correlation | 0.187 | 0.056 (noise) |
+| state r0 correlation | 0.210 (leakage) | 0.044 (noise) |
+| key s0 correlation | 0.062 (noise) | 0.054 (noise) |
 
-## 해석
+## Interpretation
 
-1. **CPA는 두 버전 모두 키 복구 실패** (HW·HD 모두). 마스킹(2-공유 + 키 마스킹)이 키를 지킵니다.
-2. **TVLA는 masking_ISW만 초과(누설)**, masking_ISWLUT는 통과.
-   - masking_ISW의 TVLA 누설은 **평문 상태(l0/r0)** 가 두 공유의 재결합(해밍거리·천이)으로 1차 누설되는 것 — 키가 아니라 평문입니다. 그래서 TVLA는 뜨지만 CPA(키)는 실패합니다.
-   - masking_ISWLUT는 (a) 산술 AND 대신 **테이블 룩업**으로 게이트에서 두 공유가 안 만나게 하고, (b) **세척**으로 레지스터/버스 재결합 천이를 끊어 상태 누설을 제거 → TVLA 0 초과.
-3. **핵심 결론**: 마스킹(ISW)만으로는 CPA엔 안전하나 **평문 상태의 TVLA 누설**이 남고, 이를 없애려면 **테이블화 + 레지스터/버스 세척**이 필요합니다. (마스킹 알고리즘은 순수 C 가능, 세척은 asm 필요.)
+1. **CPA does not recover the key on either version** (HW and HD alike). The correct key stays in the middle of the 256 candidates in all four attacks.
+2. **This outcome cannot be attributed to the masking alone.** The firmware masks the round key with a fresh random byte on every encryption, `rk[0] ^= r_key0` in `firmware/masking_ISW.c` lines 209 to 212 and in `masking_ISWLUT.c` lines 234 to 237, and `masked_xor_const_inplace` XORs that mask into one of the two shares only (`a->s0 ^= k`, `masking_ISW.c` lines 78 to 80), so it is never removed. The key-dependent intermediate is therefore re-randomised on every trace, independently of the masking. The failure of CPA on both versions is a fact of these measurements, but it does not establish that the masking is what prevents key recovery.
+3. **Only masking_ISW exceeds the fixed versus random t-test** (leakage), masking_ISWLUT passes.
+   - The t-test leakage of masking_ISW is the **plaintext state (l0/r0)** leaking at first order through the recombination of the two shares (Hamming distance, transitions), namely the plaintext and not the key. This is why the t-test fires while CPA on the key does not succeed.
+   - masking_ISWLUT (a) replaces the arithmetic AND with a **table lookup** so that the two shares never meet at a gate, and (b) breaks the register and bus recombination transitions by **overwriting**, which removes the state leakage, hence 0 samples above the t-test threshold.
+4. **Main conclusion**: ISW masking alone is not broken by CPA here, subject to finding 2, but **the t-test leakage of the plaintext state** remains, and removing it requires **a masked table plus register and bus overwriting**. (The masking algorithm can be written in pure C, the overwriting needs asm.)
 
-## 파일 구성
-
-```
-data/masked/masking_ISW_traces.npz          산술 ISW, 8192 x 10000 (65 MB)
-data/masked/masking_ISWLUT_traces.npz       ISW LUT + 세척, 8192 x 10000 (64 MB)
-firmware/masking_ISW.c                      소스 (산술 ISW)
-firmware/masking_ISWLUT.c                   소스 (ISW LUT + 레지스터/버스 세척)
-analysis/analyze_wide.py                    TVLA 분석 코드 (Welch t + HW모델 상관)
-analysis/cpa_offline.py                     CPA 공격 코드 (HW/HD 모델)
-results/SUMMARY_masking.md                  이 파일
-results/masking_ISW_result.txt              수치 요약
-results/masking_ISW_tvla.png                TVLA t-통계 + HW모델 상관
-results/masking_ISW_cpa.png                 CPA (HW 모델)
-results/masking_ISW_cpaHD.png               CPA (HD 모델)
-results/masking_ISWLUT_result.txt
-results/masking_ISWLUT_tvla.png
-results/masking_ISWLUT_cpa.png
-results/masking_ISWLUT_cpaHD.png
-```
-
-**`.npz` 내용** (numpy `np.load`): `traces` (8192 × 10000, float16) — 파형,
-`pt` (8192 × 20, uint8) — 평문+난수, `group` (8192, uint8) — 0=고정/1=랜덤,
-`key` (4, uint8) — 라운드키, 그리고 `clkout`/`adc_freq`/`samples`/`version` 메타.
-불러오기 예: `d = np.load('masking_ISW_traces.npz'); tr = d['traces']; g = d['group']`
-
-## 분석 재현 (`analysis/` 폴더에서 실행)
-
-원본 파형이 함께 있으므로 아래 코드로 표의 TVLA·CPA 결과를 그대로 재현할 수 있습니다.
-(numpy, matplotlib 필요. 인자를 생략하면 `masking_ISW` 쪽이 기본값이다.)
+## Files
 
 ```
-# TVLA (Welch t) — 인자: 데이터셋 경로, 샘플수
+data/masked/masking_ISW_traces.npz          arithmetic ISW, 8192 x 10000 (65 MB)
+data/masked/masking_ISWLUT_traces.npz       ISW LUT + overwriting, 8192 x 10000 (64 MB)
+firmware/masking_ISW.c                      source (arithmetic ISW)
+firmware/masking_ISWLUT.c                   source (ISW LUT + register and bus overwriting)
+analysis/analyze_wide.py                    t-test analysis code (Welch t + HW model correlation)
+analysis/cpa_offline.py                     CPA attack code (HW/HD models)
+results/SUMMARY_masking.md                  this file
+results/masking_ISW_result.txt              numeric summary
+results/masking_ISWLUT_result.txt           numeric summary
+```
+
+**`.npz` contents** (numpy `np.load`): `traces` (8192 × 10000, float16) for the waveforms,
+`pt` (8192 × 20, uint8) for plaintext and randomness, `group` (8192, uint8) with 0=fixed/1=random,
+`key` (4, uint8) for the round key, plus the `clkout`/`adc_freq`/`samples`/`version` metadata.
+Loading example: `d = np.load('masking_ISW_traces.npz'); tr = d['traces']; g = d['group']`
+
+## Reproducing the analysis (run from the `analysis/` folder)
+
+The raw traces are published with this code, so the commands below reproduce the t-test and CPA
+results of the tables above exactly.
+(numpy and matplotlib are required. With the argument omitted, `masking_ISW` is the default.)
+
+```
+# TVLA (Welch t) - arguments: dataset path, number of samples
 python analyze_wide.py ../data/masked/masking_ISW_traces.npz 10000
 python analyze_wide.py ../data/masked/masking_ISWLUT_traces.npz 10000
 
-# CPA — 기본 HW 모델
+# CPA - HW model by default
 python cpa_offline.py ../data/masked/masking_ISW_traces.npz
 python cpa_offline.py ../data/masked/masking_ISWLUT_traces.npz
 
-# CPA — HD(레지스터 천이) 모델은 환경변수 CPA_MODEL 로 선택
-#   POSIX 셸  : CPA_MODEL=HD python cpa_offline.py <데이터셋>
-#   PowerShell: $env:CPA_MODEL="HD"; python cpa_offline.py <데이터셋>
-#   cmd       : set CPA_MODEL=HD && python cpa_offline.py <데이터셋>
+# CPA - the HD (register transition) model is selected with the CPA_MODEL environment variable
+#   POSIX shell: CPA_MODEL=HD python cpa_offline.py <dataset>
+#   PowerShell : $env:CPA_MODEL="HD"; python cpa_offline.py <dataset>
+#   cmd        : set CPA_MODEL=HD && python cpa_offline.py <dataset>
 CPA_MODEL=HD python cpa_offline.py ../data/masked/masking_ISW_traces.npz
 CPA_MODEL=HD python cpa_offline.py ../data/masked/masking_ISWLUT_traces.npz
 ```
 
-각 실행은 `results/` 에 `<데이터셋>_tvla.png` / `_cpa.png` / `_cpaHD.png` 를 만들고,
-TVLA 최대 |t|·초과 샘플수, CPA 정답키(0x0D) 랭크를 출력합니다.
+Each run writes `<dataset>_tvla.png` / `_cpa.png` / `_cpaHD.png` into `results/`, which are
+regenerated on every run and are not tracked here, and prints the
+max |t| of the t-test with the number of samples above the threshold, and the correct-key
+(0x0D) rank of the CPA.
 
-> 주: 두 버전 모두 키 관련 상관이 위 표의 0.04~0.06 수준, 즉 상태 누설(0.19~0.21)보다
-> 훨씬 낮아 랭크가 잡음으로 정해진다. 따라서 랭크의 구체적 값(133/170/208/112)은
-> 두 구현을 비교하는 지표가 아니며, "정답키가 최상위 추측에 오르지 못함 = 미복구"가 핵심이다.
+> Note: on both versions the key-related correlation is at the 0.04 to 0.06 level of the table
+> above, far below the state leakage (0.19 to 0.21), so the rank is decided by noise. The
+> individual rank values (133/170/208/112) are therefore not a metric for comparing the two
+> implementations; what matters is that the correct key does not reach the top guess, namely
+> that it is not recovered.

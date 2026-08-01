@@ -251,23 +251,23 @@ def hx(v):
 
 def main():
     L = []
-    L.append("# Shadow-32 CPA — 12500-샘플 캡처, 라운드키 RK1..RK4 복구\n")
-    L.append("- 방식 : 라운드 1,2 = 8-bit CPA / 라운드 3,4 = 4-bit CPA "
-             "(상위니블은 키스케줄 NX 로 계산)")
-    L.append("- 서브키 12개에 CPA 를 돌리지만 그중 RK2_1 은 키스케줄이 이미 정하는 값이라")
-    L.append("  교차확인용이다. 논문이 세는 \"CPA 로 복구한 서브키\" 11개는 여기서 RK2_1 을 뺀 것이다.")
-    L.append("- 창   : prefix 창 `trace[:, :W]`, W1..W4 = %s" % ", ".join(map(str, W)))
-    L.append("- 수집 : clkout 7.5MHz / adc 7.5MHz, seekclip 위상, `-O0` 펌웨어\n")
+    L.append("# Shadow-32 CPA : 12500-sample capture, recovery of round keys RK1..RK4\n")
+    L.append("- Method : rounds 1,2 = 8-bit CPA / rounds 3,4 = 4-bit CPA "
+             "(the upper nibble is computed from the key schedule NX)")
+    L.append("- CPA is run on 12 subkeys, but RK2_1 is a value the key schedule already fixes,")
+    L.append("  so it is only a cross-check. The 11 \"subkeys recovered by CPA\" counted in the paper are these 12 minus RK2_1.")
+    L.append("- Window : prefix window `trace[:, :W]`, W1..W4 = %s" % ", ".join(map(str, W)))
+    L.append("- Capture : clkout 7.5MHz / adc 7.5MHz, seekclip phase, `-O0` firmware\n")
 
     # ---------------------------------------------------------------- 고정키
-    print("[1/2] 고정키 세트 ...", flush=True)
+    print("[1/2] Fixed-key set ...", flush=True)
     r = run_one(FIXED)
-    L.append("## 1. 고정키 세트 (`s32_ref_12500.npz`, %d x %d)\n" % (r['ntr'], r['nsm']))
-    L.append("복구 RK1..RK4 : `%s`" % hx(r['rec']))
-    L.append("정답 RK1..RK4 : `%s`" % hx(r['ref']))
-    L.append("일치 : **%d/16**,  alpha = %+d\n" % (sum(a == b for a, b in
+    L.append("## 1. Fixed-key set (`s32_ref_12500.npz`, %d x %d)\n" % (r['ntr'], r['nsm']))
+    L.append("Recovered RK1..RK4 : `%s`" % hx(r['rec']))
+    L.append("Reference RK1..RK4 : `%s`" % hx(r['ref']))
+    L.append("Matching bytes : **%d/16**,  alpha = %+d\n" % (sum(a == b for a, b in
              zip(r['rec'], r['ref'])), int(r['alpha'])))
-    L.append("| 서브키 | 방식 | 복구값 | 피크 \\|rho\\| | 피크 샘플 |")
+    L.append("| Subkey | Mode | Recovered | Peak \\|rho\\| | Peak sample |")
     L.append("|---|---|---|---|---|")
     for i, t in enumerate(_ORDER):
         idx = [0,1,2,3,4,5,6,7,10,11,14,15][i]
@@ -279,16 +279,17 @@ def main():
     v_r34 = [r['pk'][t] for t in ('R3k2','R3k3','R4k2','R4k3')]
     v_r12 = [r['pk'][t] for t in _ORDER[:8]]
     L.append("")
-    L.append("- 라운드 1·2 (8-bit CPA, 8개) : |rho| %.3f ~ %.3f" % (min(v_r12), max(v_r12)))
-    L.append("- 라운드 3·4 (4-bit CPA, 4개) : |rho| %.3f ~ %.3f" % (min(v_r34), max(v_r34)))
-    L.append("- 12개 전체 : 최소 %.3f, 최대 %.3f, 평균 %.3f\n" %
+    L.append("- Rounds 1 and 2 (8-bit CPA, 8 subkeys) : |rho| %.3f ~ %.3f" % (min(v_r12), max(v_r12)))
+    L.append("- Rounds 3 and 4 (4-bit CPA, 4 subkeys) : |rho| %.3f ~ %.3f" % (min(v_r34), max(v_r34)))
+    L.append("- All 12 : min %.3f, max %.3f, mean %.3f\n" %
              (min(v1), max(v1), float(np.mean(v1))))
-    L.append("등가class 크기 %d (master 필드 없음 — 라운드키가 펌웨어에 상수로 박힌 세트)\n"
+    L.append("Equivalence class size %d (no master field, this set has the round keys "
+             "hard-coded as constants in the firmware)\n"
              % r['csz'])
     print("      16/16 = %s  |rho| %.3f~%.3f" % (r['ok'], min(v1), max(v1)), flush=True)
 
     # ---------------------------------------------------------------- 10키
-    print("[2/2] 랜덤키 10세트 ...", flush=True)
+    print("[2/2] 10 random-key sets ...", flush=True)
     rows = []
     for i, p in enumerate(KEYSET):
         rr = run_one(p); rr['name'] = "key%02d" % (i + 1); rows.append(rr)
@@ -301,10 +302,10 @@ def main():
     n_min  = sum(bool(x['min_']) for x in rows)
     allpk  = [v for x in rows for v in x['pk'].values()]
 
-    L.append("## 2. 랜덤키 10세트 (`s32_key01..10_12500.npz`, 각 %d x %d)\n"
+    L.append("## 2. 10 random-key sets (`s32_key01..10_12500.npz`, %d x %d each)\n"
              % (rows[0]['ntr'], rows[0]['nsm']))
-    L.append("| 세트 | master | RK1 | RK2 | RK3 | RK4 | 일치 | min\\|rho\\| | "
-             "alpha | master∈class(크기) |")
+    L.append("| Set | master | RK1 | RK2 | RK3 | RK4 | Match | min\\|rho\\| | "
+             "alpha | master∈class(size) |")
     L.append("|---|---|---|---|---|---|---|---|---|---|")
     for x in rows:
         L.append("| %s | `%s` | `%s` | `%s` | `%s` | `%s` | %s | %.3f | %+d | %s (%d) |" % (
@@ -313,12 +314,12 @@ def main():
             "16/16" if x['ok'] else "FAIL", min(x['pk'].values()), int(x['alpha']),
             "O" if x['min_'] else "X", x['csz']))
     L.append("")
-    L.append("- 라운드키 RK1..RK4 완전복구 : **%d/10 세트**" % n_full)
-    L.append("- 참 64-bit master ∈ NX-등가class : **%d/10 세트** "
-             "(NX 비가역 -> master 유일복구 불가)" % n_min)
-    L.append("- 등가class 크기 : %s" % ", ".join(str(x['csz']) for x in rows))
-    L.append("- 서브키 피크 \\|rho\\| (10세트 x 12개 = %d개) : "
-             "**최소 %.3f, 최대 %.3f**, 평균 %.3f" %
+    L.append("- Full recovery of round keys RK1..RK4 : **%d/10 sets**" % n_full)
+    L.append("- True 64-bit master ∈ NX equivalence class : **%d/10 sets** "
+             "(NX is not invertible -> the master key cannot be uniquely recovered)" % n_min)
+    L.append("- Equivalence class size : %s" % ", ".join(str(x['csz']) for x in rows))
+    L.append("- Subkey peak \\|rho\\| (10 sets x 12 = %d values) : "
+             "**min %.3f, max %.3f**, mean %.3f" %
              (len(allpk), min(allpk), max(allpk), float(np.mean(allpk))))
     L.append("")
 
@@ -331,8 +332,8 @@ def main():
               open(os.path.join(OUT, "_peaks_12500.json"), "w"))
     _fig_success(rows)
     _fig_rounds(rows)
-    print("\n결과 : results/RESULTS_shadow32_12500.md")
-    print("그림 : figures/shadow32_10keys/fig_success.png")
+    print("\nResult : results/RESULTS_shadow32_12500.md")
+    print("Figs : figures/shadow32_10keys/fig_success.png")
     print("       figures/shadow32_10keys/fig_fullkey_rounds.png")
 
 # ============================================================================
@@ -446,6 +447,6 @@ if __name__ == "__main__":
         import json
         rows = json.load(open(os.path.join(OUT, "_peaks_12500.json")))
         _fig_success(rows); _fig_rounds(rows)
-        print("그림 재생성 완료")
+        print("Figures regenerated")
     else:
         main()

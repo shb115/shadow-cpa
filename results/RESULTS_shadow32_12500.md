@@ -1,18 +1,18 @@
-# Shadow-32 CPA — 12500-샘플 캡처, 라운드키 RK1..RK4 복구
+# Shadow-32 CPA : 12500-sample capture, recovery of round keys RK1..RK4
 
-- 방식 : 라운드 1,2 = 8-bit CPA / 라운드 3,4 = 4-bit CPA (상위니블은 키스케줄 NX 로 계산)
-- 서브키 12개에 CPA 를 돌리지만 그중 RK2_1 은 키스케줄이 이미 정하는 값이라
-  교차확인용이다. 논문이 세는 "CPA 로 복구한 서브키" 11개는 여기서 RK2_1 을 뺀 것이다.
-- 창   : prefix 창 `trace[:, :W]`, W1..W4 = 1100, 1850, 2750, 3500
-- 수집 : clkout 7.5MHz / adc 7.5MHz, seekclip 위상, `-O0` 펌웨어
+- Method : rounds 1,2 = 8-bit CPA / rounds 3,4 = 4-bit CPA (the upper nibble is computed from the key schedule NX)
+- CPA is run on 12 subkeys, but RK2_1 is a value the key schedule already fixes,
+  so it is only a cross-check. The 11 "subkeys recovered by CPA" counted in the paper are these 12 minus RK2_1.
+- Window : prefix window `trace[:, :W]`, W1..W4 = 1100, 1850, 2750, 3500
+- Capture : clkout 7.5MHz / adc 7.5MHz, seekclip phase, `-O0` firmware
 
-## 1. 고정키 세트 (`s32_ref_12500.npz`, 2048 x 12500)
+## 1. Fixed-key set (`s32_ref_12500.npz`, 2048 x 12500)
 
-복구 RK1..RK4 : `0D 3B 60 33 43 60 25 3C 13 25 89 C5 3C 89 0D 5D`
-정답 RK1..RK4 : `0D 3B 60 33 43 60 25 3C 13 25 89 C5 3C 89 0D 5D`
-일치 : **16/16**,  alpha = +1
+Recovered RK1..RK4 : `0D 3B 60 33 43 60 25 3C 13 25 89 C5 3C 89 0D 5D`
+Reference RK1..RK4 : `0D 3B 60 33 43 60 25 3C 13 25 89 C5 3C 89 0D 5D`
+Matching bytes : **16/16**,  alpha = +1
 
-| 서브키 | 방식 | 복구값 | 피크 \|rho\| | 피크 샘플 |
+| Subkey | Mode | Recovered | Peak \|rho\| | Peak sample |
 |---|---|---|---|---|
 | RK1_0 | 8-bit | `0D` | 0.896 | 548 |
 | RK1_1 | 8-bit | `3B` | 0.900 | 709 |
@@ -27,15 +27,15 @@
 | RK4_2 | 4-bit | `0D` | 0.798 | 2879 |
 | RK4_3 | 4-bit | `5D` | 0.786 | 3040 |
 
-- 라운드 1·2 (8-bit CPA, 8개) : |rho| 0.794 ~ 0.904
-- 라운드 3·4 (4-bit CPA, 4개) : |rho| 0.786 ~ 0.798
-- 12개 전체 : 최소 0.786, 최대 0.904, 평균 0.831
+- Rounds 1 and 2 (8-bit CPA, 8 subkeys) : |rho| 0.794 ~ 0.904
+- Rounds 3 and 4 (4-bit CPA, 4 subkeys) : |rho| 0.786 ~ 0.798
+- All 12 : min 0.786, max 0.904, mean 0.831
 
-등가class 크기 81 (master 필드 없음 — 라운드키가 펌웨어에 상수로 박힌 세트)
+Equivalence class size 81 (no master field, this set has the round keys hard-coded as constants in the firmware)
 
-## 2. 랜덤키 10세트 (`s32_key01..10_12500.npz`, 각 2048 x 12500)
+## 2. 10 random-key sets (`s32_key01..10_12500.npz`, 2048 x 12500 each)
 
-| 세트 | master | RK1 | RK2 | RK3 | RK4 | 일치 | min\|rho\| | alpha | master∈class(크기) |
+| Set | master | RK1 | RK2 | RK3 | RK4 | Match | min\|rho\| | alpha | master∈class(size) |
 |---|---|---|---|---|---|---|---|---|---|
 | key01 | `E10020BD4E590E12` | `10 2B 04 DE` | `0D 04 05 E9` | `0E 05 20 9E` | `C9 20 4E E0` | 16/16 | 0.786 | +1 | O (24) |
 | key02 | `10594F596EC32B72` | `4F 45 26 9E` | `19 26 8C E3` | `9E 8C 12 3B` | `13 12 21 B1` | 16/16 | 0.788 | +1 | O (81) |
@@ -48,7 +48,7 @@
 | key09 | `E0DF051FEC09239E` | `15 01 8E FC` | `1F 8E 90 C9` | `1C 90 02 93` | `69 02 6E 31` | 16/16 | 0.791 | +1 | O (27) |
 | key10 | `8BB298B21469FAE0` | `C8 9B 01 24` | `32 01 06 49` | `04 06 8F 9A` | `29 8F 08 AA` | 16/16 | 0.789 | +1 | O (81) |
 
-- 라운드키 RK1..RK4 완전복구 : **10/10 세트**
-- 참 64-bit master ∈ NX-등가class : **10/10 세트** (NX 비가역 -> master 유일복구 불가)
-- 등가class 크기 : 24, 81, 27, 36, 27, 81, 81, 54, 27, 81
-- 서브키 피크 \|rho\| (10세트 x 12개 = 120개) : **최소 0.777, 최대 0.912**, 평균 0.835
+- Full recovery of round keys RK1..RK4 : **10/10 sets**
+- True 64-bit master ∈ NX equivalence class : **10/10 sets** (NX is not invertible -> the master key cannot be uniquely recovered)
+- Equivalence class size : 24, 81, 27, 36, 27, 81, 81, 54, 27, 81
+- Subkey peak \|rho\| (10 sets x 12 = 120 values) : **min 0.777, max 0.912**, mean 0.835

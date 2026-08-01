@@ -1,92 +1,92 @@
-# Shadow-64 CPA 결과 — 1라운드 라운드키 복구
+# Shadow-64 CPA results: first round key recovery
 
-- 데이터 : `s64_ref_25000.npz` (4096 트레이스 x 25000 샘플)
-- 마스터키 : `07E9A4B27E3FCB472DA757EA31CAF4ED` (랜덤)
-- 정답 RK1 : `872C E3FB 644A 72D7`
-- 수집 : clkout 7.5MHz / adc 7.5MHz, seekclip 위상, `-O0` 펌웨어 + NOP 패딩
-- 분석 구간 : 1·2단계 `[:1500]`, 전수탐색은 누설지점 ±100
+- Data : `s64_ref_25000.npz` (4096 traces x 25000 samples)
+- Master key : `07E9A4B27E3FCB472DA757EA31CAF4ED` (random)
+- True RK1 : `872C E3FB 644A 72D7`
+- Acquisition : clkout 7.5MHz / adc 7.5MHz, seekclip phase, `-O0` firmware + NOP padding
+- Analysis window : `[:1500]` for stages 1 and 2, leakage point ±100 for the exhaustive search
 
-## 1. 복구 결과
+## 1. Recovery results
 
-**워드 4/4, 바이트 8/8 복구.**
+**4/4 words, 8/8 bytes recovered.**
 
-| 워드 | 1단계 하위(8-bit) \|r\| | 2단계 상위(16-bit) \|r\| | 복구 | 정답 | 결과 |
+| Word | stage 1 low (8-bit) \|r\| | stage 2 high (16-bit) \|r\| | recovered | true | result |
 |---|---|---|---|---|---|
-| RK1_0 | `2C` 0.720 | `87` 0.888 | `872C` | `872C` | 완전복구 |
-| RK1_1 | `FB` 0.732 | `E3` 0.898 | `E3FB` | `E3FB` | 완전복구 |
-| RK1_2 | `4A` 0.518 | `64` 0.675 | `644A` | `644A` | 완전복구 |
-| RK1_3 | `D7` 0.517 | `72` 0.668 | `72D7` | `72D7` | 완전복구 |
+| RK1_0 | `2C` 0.720 | `87` 0.888 | `872C` | `872C` | full recovery |
+| RK1_1 | `FB` 0.732 | `E3` 0.898 | `E3FB` | `E3FB` | full recovery |
+| RK1_2 | `4A` 0.518 | `64` 0.675 | `644A` | `644A` | full recovery |
+| RK1_3 | `D7` 0.517 | `72` 0.668 | `72D7` | `72D7` | full recovery |
 
-1단계(바이트 HW)는 상위 8비트가 잡음으로 들어가 상관이 낮고(0.5~0.7),
-하위를 고정한 뒤 **전체 16-bit HW** 로 상위를 찾는 2단계에서 상관이 크게 오른다(0.67~0.90).
+Stage 1 (byte HW) gives a low correlation (0.5~0.7) because the upper 8 bits enter as noise,
+while stage 2, which fixes the low byte and searches the high byte with the **full 16-bit HW**, raises it sharply (0.67~0.90).
 
-## 2. 방법
+## 2. Method
 
 ```
-h  = F16(L0) ^ L1                     # 키 XOR 이전 중간값
-① 하위바이트 : HW8(h&0xFF ^ c) 로 CPA          -> klo
-② 상위바이트 : klo 고정해 16-bit 값 재구성 후
-               HW16(h ^ ((c<<8)|klo)) 로 CPA   -> khi
+h  = F16(L0) ^ L1                     # intermediate value before the key XOR
+① low byte  : CPA with HW8(h&0xFF ^ c)         -> klo
+② high byte : rebuild the 16-bit value with klo fixed, then
+              CPA with HW16(h ^ ((c<<8)|klo))  -> khi
    RK = (khi<<8) | klo
 ```
-이후 `S1L = h ^ RK` 로 다음 중간값을 만들어 RK1_2 / RK1_3 로 이어간다.
+The next intermediate value is then built as `S1L = h ^ RK`, and the same steps continue for RK1_2 / RK1_3.
 
-## 3. 보수 모호성 — alpha 가 필요한 이유
+## 3. Complement ambiguity: why alpha is needed
 
-HW 모델에는 제거할 수 없는 1비트 모호성이 있다.
+The HW model carries a one-bit ambiguity that cannot be removed.
 
-- 8-bit : `HW(x^(k^0xFF)) = 8 - HW(x^k)` → 보수쌍의 r 은 **부호만 반대**
-  (실측: 정답 `2C` +0.7197 / 보수 `D3` −0.7197, 합 = 0.000000)
-- 16-bit : `HW16(x^(k^0xFFFF)) = 16 - HW16(x^k)` → 상·하위를 **동시에** 뒤집으면
-  `|rho|` 가 완전히 동일 (실측 차 = 0.0000)
+- 8-bit : `HW(x^(k^0xFF)) = 8 - HW(x^k)` → the r values of a complement pair differ **in sign only**
+  (measured: true key `2C` +0.7197 / complement `D3` −0.7197, sum = 0.000000)
+- 16-bit : `HW16(x^(k^0xFFFF)) = 16 - HW16(x^k)` → flipping the high and low bytes **at the same time**
+  leaves `|rho|` exactly unchanged (measured difference = 0.0000)
 
-따라서 `|r|` 만으로는 어느 단계에서도 이 1비트를 결정할 수 없고, 2단계를 두 번 돌려도
-마찬가지다. **디바이스 부호 alpha 를 알아야 한다** (HW 누설이면 `alpha=+1`).
-본 실험의 alpha 는 같은 보드의 Shadow-32 160개 서브키에서 정답키 상관이 항상 양수임을
-확인해 `+1` 로 확정했다.
+So `|r|` alone cannot decide this bit at either stage, and running stage 2 twice does not
+help. **The device sign alpha has to be known** (`alpha=+1` for HW leakage).
+In this experiment alpha was fixed to `+1` after checking that the true key correlation is
+always positive over the 160 Shadow-32 subkeys measured on the same board.
 
-> 참고: 하위만 뒤집으면 적합도가 실제로 떨어진다(0.8878 → 0.5828). 하지만 상위까지
-> 같이 뒤집힌 후보가 `|r|` 을 그대로 유지하므로 이 비대칭은 이용할 수 없다.
-> alpha 없이 `argmax|rho|` 로 풀면 `RK ^ 0xFFFF` 를 복구해 워드 2/4 로 떨어진다.
+> Note: flipping the low byte only does lower the fit (0.8878 → 0.5828). But the candidate
+> in which the high byte is flipped as well keeps `|r|` unchanged, so this asymmetry cannot be used.
+> Solving with `argmax|rho|` and no alpha recovers `RK ^ 0xFFFF` and drops to 2/4 words.
 
-즉 alpha 를 모르면 워드마다 후보가 **정확히 2개** (`{k, k^0xFFFF}`) 로 남는다.
-알려진 평문·암호문 쌍 하나로 즉시 판별 가능하므로 실질적 비용은 없다.
+Without alpha, therefore, exactly **two** candidates (`{k, k^0xFFFF}`) remain for each word.
+A single known plaintext and ciphertext pair separates them at once, so the practical cost is zero.
 
-## 4. 16-bit 전수탐색과의 비교
+## 4. Comparison with the 16-bit exhaustive search
 
-65536 후보를 16-bit HW 하나로 훑었을 때의 정답 순위:
+Rank of the true key when the 65536 candidates are swept with a single 16-bit HW model:
 
-| 워드 | 전수탐색 1위 | 1위 \|rho\| | 정답 \|rho\| | 정답 순위 | 보수 순위 |
+| Word | exhaustive rank 1 | rank 1 \|rho\| | true \|rho\| | true rank | complement rank |
 |---|---|---|---|---|---|
-| RK1_0 | `78D3` | 0.88777 | 0.88777 | **2위** | 1위 |
-| RK1_1 | `1C04` | 0.89828 | 0.89828 | **2위** | 1위 |
-| RK1_2 | `DFFF` | 0.68139 | 0.67474 | **8위** | 7위 |
-| RK1_3 | `8D28` | 0.66795 | 0.66795 | **2위** | 1위 |
+| RK1_0 | `78D3` | 0.88777 | 0.88777 | **2** | 1 |
+| RK1_1 | `1C04` | 0.89828 | 0.89828 | **2** | 1 |
+| RK1_2 | `DFFF` | 0.68139 | 0.67474 | **8** | 7 |
+| RK1_3 | `8D28` | 0.66795 | 0.66795 | **2** | 1 |
 
-**전수탐색은 `RK1_2`(8위) 에서 정답을 상위 2개 안에 넣지 못한다.**
-반면 같은 데이터에서 2단계 분해는 이들을 정확히 복구한다.
-하위바이트를 따로 보는 1단계가 그 바이트의 누설을 분리해 내기 때문이고,
-전수탐색은 상·하위를 뭉뚱그려 보면서 약한 워드에서 순위가 흐트러진다.
+**The exhaustive search does not place the true key in the top 2 for `RK1_2`(rank 8).**
+The two-stage decomposition recovers them exactly from the same data.
+Stage 1 looks at the low byte on its own and isolates the leakage of that byte,
+while the exhaustive search treats high and low together and loses the ranking on the weak words.
 
-즉 2단계 분해는 계산량 절감(65536 → 256+256)만이 아니라 **복구 성능 자체가 더 좋다**.
+The two-stage decomposition therefore does not only cut the work (65536 → 128+256 = 384), **it recovers better**.
 
-## 5. 파일 구성
+## 5. File layout
 
 ```
-data/shadow64/s64_ref_25000.npz            파형 4096 x 25000
-firmware/shadow64_nop_newkey.c             수집 펌웨어 소스 (이미지는 미포함)
-reference/shadow64.c                       레퍼런스 구현 (파형 수집에는 미사용)
-analysis/cpa_s64_analysis.py               2단계 CPA + 16-bit 전수탐색
-analysis/shadow64_ks.py                    키 스케줄
-analysis/fig_shadow64_trace.py             전력 파형 그림, 라운드 주기 자기상관 측정
-results/RESULTS_shadow64.md                이 문서
+data/shadow64/s64_ref_25000.npz            traces 4096 x 25000
+firmware/shadow64_nop_newkey.c             acquisition firmware source (image not included)
+reference/shadow64.c                       reference implementation (not used for acquisition)
+analysis/cpa_s64_analysis.py               two-stage CPA + 16-bit exhaustive search
+analysis/shadow64_ks.py                    key schedule
+analysis/fig_shadow64_trace.py             power trace figures, round period autocorrelation
+results/RESULTS_shadow64.md                this document
 figures/shadow64/
-  stage1_8bit/stage1_RK1_*.png             1단계 하위바이트 8-bit CPA (워드별)
-  stage2_16bit/stage2_RK1_*.png            2단계 하위고정 16-bit CPA (워드별)
-  exhaustive_16bit/exh_RK1_2_*.png         16-bit 전수탐색 (RK1_2 만: |r| 곡선 top256 /
-                                           순위 막대 top24)
-  trace.png, trace_zoom.png                전력 파형
+  stage1_8bit/stage1_RK1_*.png             stage 1 low byte 8-bit CPA (per word)
+  stage2_16bit/stage2_RK1_*.png            stage 2 16-bit CPA, low byte fixed (per word)
+  exhaustive_16bit/exh_RK1_2_*.png         16-bit exhaustive search (RK1_2 only: |r| curves top256 /
+                                           rank bars top24)
+  trace.png, trace_zoom.png                power traces
 ```
 
-재현 : `analysis/` 에서 `python cpa_s64_analysis.py` (기본 경로가 위 배치를 가리킨다).
-4절의 16-bit 전수탐색 비교는 보충 자료이며 논문 본문에는 싣지 않았다.
+Reproduction : run `python cpa_s64_analysis.py` in `analysis/` (the default paths point to the layout above).
+The 16-bit exhaustive search comparison in Section 4 is supplementary and is not part of the paper.

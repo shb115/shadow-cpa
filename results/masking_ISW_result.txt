@@ -1,14 +1,14 @@
 [masking_ISW (arithmetic ISW AND)]
-데이터셋: masking_ISW_traces.npz  (고정 4096 + 랜덤 4096 = 8192 트레이스, samples=10000, -O0)
+Dataset: masking_ISW_traces.npz  (fixed 4096 + random 4096 = 8192 traces, samples=10000, -O0)
 
 TVLA (fixed vs random):
-  최대 |t| = 13.46,  |t|>4.5 초과 샘플 = 18  ->  초과(누설)
+  max |t| = 13.46,  samples above the 4.5 threshold = 18  ->  exceeded (leakage)
 
-CPA (정답키 0x0D, 랭크/256):
-  HW 모델: 랭크 133   (미복구)
-  HD 모델: 랭크 208   (미복구)
+CPA (correct key 0x0D, rank/256):
+  HW model: rank 133   (not recovered)
+  HD model: rank 208   (not recovered)
 
-비밀/공유 모델 상관 |rho|:
+secret/share model correlation |rho|:
   l0           0.1874
   r0           0.2096
   F(l0)        0.1166

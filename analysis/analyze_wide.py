@@ -22,13 +22,13 @@ mods={'l0':hw(l0),'r0':hw(r0),'F(l0)':hw(F(l0)),'s0=F(l0)^l1^k0':hw(F(l0)^l1^0x0
       'x0=r_in0':hw(P[:,8].astype(np.int64)),'x1=l0^r_in0':hw(l0^P[:,8].astype(np.int64))}
 H=np.stack(list(mods.values()),1); rho=np.abs(mcorr(rn,H))
 ts=welch(fx,rn); t=np.abs(ts)
-print('%s  창 0-%d,  트레이스 %d/%d'%(fn,W,len(fx),len(rn)))
-print('  TVLA 최대 |t| = %.2f @샘플 %d,  |t|>4.5 샘플수 %d'%(t.max(),int(t.argmax()),int((t>4.5).sum())))
-print('  %-18s %9s %8s'%('모델','max|rho|','@샘플'))
+print('%s  window 0-%d,  traces %d/%d'%(fn,W,len(fx),len(rn)))
+print('  TVLA max |t| = %.2f @sample %d,  samples above the 4.5 threshold %d'%(t.max(),int(t.argmax()),int((t>4.5).sum())))
+print('  %-18s %9s %8s'%('model','max|rho|','@sample'))
 for i,nm in enumerate(mods):
-    a=rho[:,i]; print('  %-18s %9.4f %8d %s'%(nm,a.max(),int(a.argmax()),'<== 누설' if a.max()>0.2 else 'ok'))
+    a=rho[:,i]; print('  %-18s %9.4f %8d %s'%(nm,a.max(),int(a.argmax()),'<== leakage' if a.max()>0.2 else 'ok'))
 
-# ---- 결과 시각화 저장 (PNG) ----
+# ---- save result visualization (PNG) ----
 import matplotlib; matplotlib.use('Agg'); import matplotlib.pyplot as plt
 name=os.path.basename(fn)
 name=name[:-4] if name.endswith('.npz') else name
@@ -48,4 +48,4 @@ ax[1].axhline(0.2,color='0.5',ls=':',lw=0.8)
 ax[1].set_title('|correlation| with Hamming-weight models'); ax[1].set_xlabel('sample')
 ax[1].set_ylabel('|corr|'); ax[1].margins(x=0); ax[1].legend(fontsize=7,ncol=3,loc='upper right')
 fig.tight_layout(); png=base+'_tvla.png'; fig.savefig(png,dpi=120); plt.close(fig)
-print('  PNG 저장: %s'%png)
+print('  PNG saved: %s'%png)

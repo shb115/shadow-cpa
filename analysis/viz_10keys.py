@@ -115,7 +115,7 @@ for ni in range(len(NLIST)):
 plt.figure(figsize=(W_HALF, H_HALF))
 for j, si in enumerate(SHOW):
     plt.plot(NLIST, SR[:, si], marker='o', color=COL[j], label=LBL[j])
-plt.plot(NLIST, SR_full, marker='s', color='k', ls='--', label='full 64-bit key')
+plt.plot(NLIST, SR_full, marker='s', color='k', ls='--', label='all 16 round keys')
 plt.xscale('log'); plt.ylim([-0.03, 1.03]); plt.grid(True, alpha=0.4)
 plt.xlabel('Number of traces'); plt.ylabel('Success rate')
 plt.legend(loc='lower right', handlelength=1.5, borderpad=0.3, labelspacing=0.25)

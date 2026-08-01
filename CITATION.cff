@@ -36,7 +36,7 @@ contact:
     email: dgkwon@kunsan.ac.kr
 # Archived release v1.0. The concept DOI 10.5281/zenodo.21731939 always
 # resolves to the latest version.
-doi: 10.5281/zenodo.21731940
+doi: 10.5281/zenodo.21731939
 license: MIT
 abstract: >-
   Target firmware, acquisition script and analysis code for a non-profiling

@@ -1,6 +1,6 @@
 # Side-channel analysis of the Shadow lightweight block cipher
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21731940.svg)](https://doi.org/10.5281/zenodo.21731940)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21731939.svg)](https://doi.org/10.5281/zenodo.21731939)
 
 Firmware, acquisition and analysis code for the paper
 
@@ -20,7 +20,7 @@ separately:
 | | |
 |---|---|
 | **Power traces** | https://doi.org/10.5281/zenodo.21721710 |
-| **This code** | https://doi.org/10.5281/zenodo.21731940 — archived release `v1.0` |
+| **This code** | https://doi.org/10.5281/zenodo.21731939 — archived releases, all versions |
 
 ## Getting the traces
 

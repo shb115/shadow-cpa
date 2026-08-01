@@ -34,8 +34,9 @@ contact:
   - family-names: Kwon
     given-names: Donggeun
     email: dgkwon@kunsan.ac.kr
-# Filled in after the first GitHub release is archived by Zenodo.
-# doi: 10.5281/zenodo.XXXXXXXX
+# Archived release v1.0. The concept DOI 10.5281/zenodo.21731939 always
+# resolves to the latest version.
+doi: 10.5281/zenodo.21731940
 license: MIT
 abstract: >-
   Target firmware, acquisition script and analysis code for a non-profiling

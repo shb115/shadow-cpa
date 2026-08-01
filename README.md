@@ -1,5 +1,7 @@
 # Side-channel analysis of the Shadow lightweight block cipher
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21731940.svg)](https://doi.org/10.5281/zenodo.21731940)
+
 Firmware, acquisition and analysis code for the paper
 
 > *Practical Key Recovery on the Shadow Lightweight Block Cipher with Non-Profiling
@@ -18,12 +20,12 @@ separately:
 | | |
 |---|---|
 | **Power traces** | https://doi.org/10.5281/zenodo.21721710 |
-| **This code** | `<CODE-DOI>` — archived release, see `CITATION.cff` |
+| **This code** | https://doi.org/10.5281/zenodo.21731940 — archived release `v1.0` |
 
 ## Getting the traces
 
-Download the archive from the Zenodo record above and unpack it into `data/`, so that the tree
-becomes:
+Download `shadow-cpa-traces.zip` (495 MB) from the Zenodo record above and unpack it in the
+root of this repository. It contains the `data/` tree, so this is all it takes:
 
 ```
 data/
@@ -33,8 +35,8 @@ data/
   masked/             masking_ISW_traces.npz, masking_ISWLUT_traces.npz
 ```
 
-Every script in `analysis/` looks for the traces at those paths by default. Nothing else needs
-configuring. The traces are not tracked here because of their size.
+Every script in `analysis/` looks for the traces at those paths by default; nothing else needs
+configuring. They are not tracked here because of their size.
 
 One part of the repository runs without any download: `reference/selftest.c` reproduces the
 round keys reported in the paper from the key schedule alone.

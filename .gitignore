@@ -1,0 +1,19 @@
+# Power traces — archived on Zenodo, see README.md
+data/*
+!data/.gitkeep
+
+# Figures written by the analysis code
+figures/
+results/*.png
+
+# Build products
+*.hex
+*.elf
+*.o
+selftest
+selftest.exe
+
+# Python
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/

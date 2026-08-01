@@ -1,0 +1,75 @@
+cff-version: 1.2.0
+message: >-
+  If you use this software, please cite it using the metadata in this file,
+  together with the power traces it analyses (listed under references). The
+  accompanying paper is under review; its citation will be added here once it
+  is published.
+title: >-
+  Firmware and analysis code for "Practical Key Recovery on the Shadow
+  Lightweight Block Cipher with Non-Profiling Correlation Power Analysis"
+type: software
+authors:
+  - family-names: Shin
+    given-names: Hanbeom
+    affiliation: "Korea University, School of Cybersecurity, Seoul, Republic of Korea"
+  - family-names: Kim
+    given-names: Insung
+    affiliation: "Korea University, School of Cybersecurity, Seoul, Republic of Korea"
+  - family-names: Kim
+    given-names: Sunyeop
+    affiliation: "Korea University, School of Cybersecurity, Seoul, Republic of Korea"
+  - family-names: Jang
+    given-names: Jihoon
+    affiliation: "Korea University, School of Cybersecurity, Seoul, Republic of Korea"
+  - family-names: Shin
+    given-names: Myoungsu
+    affiliation: "ENERZAi Inc., Seoul, Republic of Korea"
+  - family-names: Kwon
+    given-names: Donggeun
+    affiliation: >-
+      Kunsan National University, Department of Computer Science and Information
+      Engineering, Gunsan-si, Republic of Korea
+    email: dgkwon@kunsan.ac.kr
+contact:
+  - family-names: Kwon
+    given-names: Donggeun
+    email: dgkwon@kunsan.ac.kr
+# Filled in after the first GitHub release is archived by Zenodo.
+# doi: 10.5281/zenodo.XXXXXXXX
+license: MIT
+abstract: >-
+  Target firmware, acquisition script and analysis code for a non-profiling
+  correlation power analysis of the Shadow lightweight block cipher. All traces
+  were acquired on a ChipWhisperer-Nano capture board with its on-board
+  STM32F030F4 target, clocked at 7.5 MHz with one sample per clock cycle and
+  firmware built at optimisation level -O0. The code covers Shadow-32 with a
+  fixed key, Shadow-32 with ten independently chosen keys, and Shadow-64,
+  together with a fixed-versus-random t-test of two masked Shadow-32
+  implementations. The power traces it analyses are archived separately; see
+  the related identifier below.
+keywords:
+  - side-channel analysis
+  - correlation power analysis
+  - lightweight block cipher
+  - Shadow
+  - masking
+  - leakage assessment
+references:
+  - type: data
+    title: >-
+      Power traces for "Practical Key Recovery on the Shadow Lightweight Block
+      Cipher with Non-Profiling Correlation Power Analysis"
+    authors:
+      - family-names: Shin
+        given-names: Hanbeom
+      - family-names: Kim
+        given-names: Insung
+      - family-names: Kim
+        given-names: Sunyeop
+      - family-names: Jang
+        given-names: Jihoon
+      - family-names: Shin
+        given-names: Myoungsu
+      - family-names: Kwon
+        given-names: Donggeun
+    doi: 10.5281/zenodo.21721710

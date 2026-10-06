@@ -1,0 +1,40 @@
+
+masking_ISW_O0-CWNANO.elf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+08000468 <masked_xor_key>:
+ 8000468:	b082      	sub	sp, #8
+ 800046a:	9001      	str	r0, [sp, #4]
+ 800046c:	0008      	movs	r0, r1
+ 800046e:	0011      	movs	r1, r2
+ 8000470:	466b      	mov	r3, sp
+ 8000472:	3303      	adds	r3, #3
+ 8000474:	1c02      	adds	r2, r0, #0
+ 8000476:	701a      	strb	r2, [r3, #0]
+ 8000478:	466b      	mov	r3, sp
+ 800047a:	3302      	adds	r3, #2
+ 800047c:	1c0a      	adds	r2, r1, #0
+ 800047e:	701a      	strb	r2, [r3, #0]
+ 8000480:	9b01      	ldr	r3, [sp, #4]
+ 8000482:	781a      	ldrb	r2, [r3, #0]
+ 8000484:	466b      	mov	r3, sp
+ 8000486:	3303      	adds	r3, #3
+ 8000488:	781b      	ldrb	r3, [r3, #0]
+ 800048a:	4053      	eors	r3, r2
+ 800048c:	b2da      	uxtb	r2, r3
+ 800048e:	9b01      	ldr	r3, [sp, #4]
+ 8000490:	701a      	strb	r2, [r3, #0]
+ 8000492:	9b01      	ldr	r3, [sp, #4]
+ 8000494:	785a      	ldrb	r2, [r3, #1]
+ 8000496:	466b      	mov	r3, sp
+ 8000498:	3302      	adds	r3, #2
+ 800049a:	781b      	ldrb	r3, [r3, #0]
+ 800049c:	4053      	eors	r3, r2
+ 800049e:	b2da      	uxtb	r2, r3
+ 80004a0:	9b01      	ldr	r3, [sp, #4]
+ 80004a2:	705a      	strb	r2, [r3, #1]
+ 80004a4:	46c0      	nop			@ (mov r8, r8)
+ 80004a6:	b002      	add	sp, #8
+ 80004a8:	4770      	bx	lr

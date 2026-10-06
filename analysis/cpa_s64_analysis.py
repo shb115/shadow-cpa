@@ -1,3 +1,29 @@
+# -*- coding: utf-8 -*-
+"""
+Shadow-64: two-stage CPA on the first round key (Section 5 of the paper), with a 16-bit
+exhaustive search as a supplementary comparison.
+
+Data   : data/shadow64/s64_ref_25000.npz (4,096 traces x 25,000 samples, master key
+         07E9A4B27E3FCB472DA757EA31CAF4ED, first round key 872C E3FB 644A 72D7), and
+         data/shadow32_fixedkey/s32_ref_12500.npz, from which the sign of alpha is taken.
+Method : for each 16-bit word, stage 1 is a 7-bit CPA on the lower byte over the 128
+         representatives with the hypothesis HW(h_low xor k), the complement pair being
+         resolved by the sign of alpha; stage 2 fixes the lower byte and runs a CPA over the
+         256 upper bytes with the full 16-bit Hamming weight.  Both stages run over the
+         Round-1 samples located from the mean trace alone (round_structure.py, 32 rounds).
+         The sign of alpha is a property of the measurement setup, not of the key; it is
+         taken from the decision on D of Section 4.3, run without the key on the Shadow-32
+         fixed-key traces of the same board (cpa_shadow32_12500.recover_fullkey), so this
+         script needs that trace file as well.
+         For RK1_0 the script also reports the candidate with the correct lower byte and the
+         upper byte 0x00 (its correlation and its rank among the 256 upper-byte candidates),
+         the comparison made in Section 5.3 of the paper.
+
+Usage :  python cpa_s64_analysis.py [npz] [figure directory]
+Output:  console, results/RESULTS_shadow64.md, figures/shadow64/stage1_8bit/stage1_RK1_*.pdf (+ .png),
+         figures/shadow64/stage2_16bit/stage2_RK1_*.pdf (+ .png) (stage1_RK1_0 and stage2_RK1_0 are
+         Fig. 16(a) and (b) of the paper), figures/shadow64/exhaustive_16bit/*.png
+"""
 import os, sys, io
 try: sys.stdout.reconfigure(encoding="utf-8")
 except Exception: pass
@@ -11,9 +37,21 @@ NPZ    = sys.argv[1] if len(sys.argv) > 1 else os.path.join(
              _HERE, "..", "data", "shadow64", "s64_ref_25000.npz")
 OUT    = sys.argv[2] if len(sys.argv) > 2 else os.path.join(
              _HERE, "..", "figures", "shadow64")
-WIN    = 1500
-EXHALF = 100
-ALPHA  = +1.0
+# Stages 1 and 2 run over the Round-1 samples, located from the mean trace alone
+# (round_structure.py, 32 rounds).  The previous version used the prefix [0, 1500).
+sys.path.insert(0, _HERE)
+from round_structure import round_structure, round_interval
+NROUNDS64 = 32
+
+# The sign of alpha is a property of the measurement setup, not of the key.  It is taken from
+# the decision on D of Section 4.3, run without the key on the Shadow-32 fixed-key traces
+# acquired on the same board.  (The previous version fixed alpha = +1 after checking the
+# correct-key correlations of known Shadow-32 keys.)
+from cpa_shadow32_12500 import FIXED as S32_FIXED, recover_fullkey as s32_recover
+def alpha_from_shadow32(path=S32_FIXED):
+    d32 = np.load(path)
+    return s32_recover(d32["traces"].astype(np.float64), d32["pt"])[1]      # alpha
+ALPHA = alpha_from_shadow32()
 
 D1 = os.path.join(OUT, "stage1_8bit")
 D2 = os.path.join(OUT, "stage2_16bit")
@@ -38,8 +76,10 @@ pt = d["pt"]
 RK = [int(x) for x in d["rk"][:4]]
 MASTER = d["master"] if "master" in d.files else None
 N, S = tr.shape
+PERIOD, BOUND = round_structure(tr, nrounds=NROUNDS64)
+A0, B0 = round_interval(1, PERIOD, BOUND, S)
 
-Tc = tr[:, :WIN]; Tn = Tc - Tc.mean(0); Tss = (Tn**2).sum(0); good = Tss > 0
+Tc = tr[:, A0:B0]; Tn = Tc - Tc.mean(0); Tss = (Tn**2).sum(0); good = Tss > 0
 
 def corr_all(H, Tn_, Tss_, good_):
     Hn = H - H.mean(0)
@@ -83,8 +123,12 @@ def plot_cpa(c, best, path, label):
     plt.ylim(YLIM); plt.grid(True, alpha=0.35)
     plt.legend(loc='upper right', handlelength=1.1, borderpad=0.2, handletextpad=0.3)
     plt.xlabel('Sample index'); plt.ylabel('Absolute correlation')
-    plt.xlim([0, cc.shape[1]])
-    plt.savefig(path, dpi=DPI); plt.close()
+    xs = A0 + np.arange(cc.shape[1])            # absolute sample index
+    for ln in plt.gca().get_lines():
+        ln.set_xdata(xs)
+    plt.xlim([xs[0], xs[-1] + 1])
+    plt.savefig(path, dpi=DPI)
+    plt.savefig(os.path.splitext(path)[0] + ".pdf"); plt.close()
 
 w  = lambda a, b: (pt[:, a].astype(np.int64) << 8) | pt[:, b].astype(np.int64)
 l0, l1, r0, r1 = w(0,1), w(2,3), w(4,5), w(6,7)
@@ -96,11 +140,9 @@ EXH_TOPN  = 256
 EXH_BAR   = 24
 
 def exhaustive16(h, ktrue, name):
-    hh = HW16(h ^ ktrue); hn = hh - hh.mean()
-    Tn0 = tr - tr.mean(0); Ts0 = (Tn0**2).sum(0); g0 = Ts0 > 0
-    cc = np.zeros(S); cc[g0] = (hn @ Tn0[:, g0]) / np.sqrt((hn**2).sum() * Ts0[g0])
-    pos = int(np.argmax(np.abs(cc)))
-    a, b = max(0, pos-EXHALF), min(S, pos+EXHALF+1)
+    # the sweep runs over the same Round-1 samples as stages 1 and 2; the key is used
+    # only to report the rank of the true key, not to choose where to look
+    a, b = A0, B0
     Tw = tr[:, a:b]; Tnw = Tw - Tw.mean(0); Tsw = (Tnw**2).sum(0); gw = Tsw > 0
     peak = np.zeros(65536)
     for i in range(0, 65536, 4096):
@@ -172,14 +214,23 @@ def recover(h, ref, name):
     kw  = (khi << 8) | klo
     plot_cpa(c2, khi, os.path.join(D2, "stage2_%s.png" % name),
              "RK=0x%04X   |r|=%.3f" % (kw, abs(p2[khi])))
+    # the stage-2 candidate with the upper byte 0x00 (correct lower byte): its signed peak and
+    # its rank among the 256 upper-byte candidates, by the alpha-signed score and by |rho|
+    # (the comparison of Section 5.3 of the paper for RK1_0)
+    r00 = float(p2[0])
+    rank00 = int(np.sum(ALPHA * p2 > ALPHA * p2[0])) + 1
+    rank00_abs = int(np.sum(np.abs(p2) > abs(p2[0]))) + 1
 
     rt, rc, pt_, k1st, p1st = exhaustive16(h, ref, name)
 
     ok = (kw == ref)
     print("%s: stage 1 %02X(r=%+.3f, pair {%02X,%02X}) -> stage 2 %02X(r=%+.3f) => %04X %s | true key rank %d in the exhaustive search"
           % (name, klo, p1_7[b7], pair[0], pair[1], khi, p2[khi], kw, "OK" if ok else "X", rt))
+    print("   stage 2, upper byte 0x00 (candidate 0x00%02X): r=%+.4f, rank %d of 256 by the alpha-signed score, %d by |rho|"
+          % (klo, r00, rank00, rank00_abs))
     rows.append(dict(name=name, ref=ref, klo=klo, khi=khi, kw=kw, ok=ok,
                      pair=pair, r1=float(p1_7[b7]), r2=float(p2[khi]),
+                     r00=r00, rank00=rank00, rank00_abs=rank00_abs,
                      rank_true=rt, rank_comp=rc, exh_top=k1st, exh_top_r=p1st, exh_true_r=pt_))
     return kw
 
@@ -214,7 +265,9 @@ if MASTER is not None and MASTER.size:
     A("- Master key : `%s` (random)" % "".join("%02X" % x for x in MASTER))
 A("- True RK1 : `%s`" % " ".join("%04X" % x for x in RK))
 A("- Acquisition : clkout 7.5MHz / adc 7.5MHz, seekclip phase, `-O0` firmware + NOP padding")
-A("- Analysis window : `[:%d]` for stages 1 and 2, leakage point ±%d for the exhaustive search\n" % (WIN, EXHALF))
+A("- Samples : Round 1, `[%d, %d)`, from the mean trace alone (round period %d, boundary %d, `round_structure.py`);"
+  % (A0, B0, PERIOD, BOUND))
+A("  used for stages 1 and 2 and for the exhaustive search. Neither the key nor an attack outcome is used.\n")
 
 A("## 1. Recovery results\n")
 A("**%d/4 words, %d/8 bytes recovered.**\n" % (nw, nb))
@@ -227,6 +280,12 @@ for r in rows:
 A("")
 A("Stage 1 (byte HW) gives a low correlation (0.5~0.7) because the upper 8 bits enter as noise,")
 A("while stage 2, which fixes the low byte and searches the high byte with the **full 16-bit HW**, raises it sharply (0.67~0.90).\n")
+r0_ = rows[0]
+A("In stage 2 of %s the candidate `%04X`, with the correct lower byte and the upper byte `00`, reaches only"
+  % (r0_["name"], r0_["klo"]))
+A("|rho| = %.3f (rank %d of 256 by the alpha-signed score, %d by |rho|), below the %.3f of the lower byte alone in"
+  % (abs(r0_["r00"]), r0_["rank00"], r0_["rank00_abs"], abs(r0_["r1"])))
+A("stage 1, because its hypothesis includes the Hamming weight of a wrong upper byte (the comparison of Section 5.3 of the paper).\n")
 
 A("## 2. Method\n")
 A("```")
@@ -245,16 +304,17 @@ A("  (measured: true key `2C` +0.7197 / complement `D3` −0.7197, sum = 0.00000
 A("- 16-bit : `HW16(x^(k^0xFFFF)) = 16 - HW16(x^k)` → flipping the high and low bytes **at the same time**")
 A("  leaves `|rho|` exactly unchanged (measured difference = 0.0000)\n")
 A("So `|r|` alone cannot decide this bit at either stage, and running stage 2 twice does not")
-A("help. **The device sign alpha has to be known** (`alpha=+1` for HW leakage).")
-A("In this experiment alpha was fixed to `+1` after checking that the true key correlation is")
-A("always positive over the 160 Shadow-32 subkeys measured on the same board.\n")
+A("help. **The device sign alpha has to be known.**")
+A("alpha is a property of the measurement setup, not of the key. It is taken from the decision on D")
+A("of Section 4.3 of the paper, run without the key on the Shadow-32 fixed-key traces acquired on")
+A("the same board (`alpha_from_shadow32`), which gives alpha = %+d.\n" % int(ALPHA))
 A("> Note: flipping the low byte only does lower the fit (0.8878 → 0.5828). But the candidate")
 A("> in which the high byte is flipped as well keeps `|r|` unchanged, so this asymmetry cannot be used.")
 A("> Solving with `argmax|rho|` and no alpha recovers `RK ^ 0xFFFF` and drops to 2/4 words.\n")
-A("Without alpha, therefore, exactly **two** candidates (`{k, k^0xFFFF}`) remain for each word.")
-A("A single known plaintext and ciphertext pair separates them at once, so the practical cost is zero.\n")
+A("Without alpha, therefore, exactly **two** candidates (`{k, k^0xFFFF}`) remain for each word;")
+A("the paper fixes the sign by the decision on D of Section 4.3, as above.\n")
 
-A("## 4. Comparison with the 16-bit exhaustive search\n")
+A("## 4. Comparison with the 16-bit exhaustive search (supplementary, not part of the paper)\n")
 A("Rank of the true key when the 65536 candidates are swept with a single 16-bit HW model:\n")
 A("| Word | exhaustive rank 1 | rank 1 \\|rho\\| | true \\|rho\\| | true rank | complement rank |")
 A("|---|---|---|---|---|---|")
@@ -269,13 +329,16 @@ if bad:
     A("The two-stage decomposition recovers them exactly from the same data.")
     A("Stage 1 looks at the low byte on its own and isolates the leakage of that byte,")
     A("while the exhaustive search treats high and low together and loses the ranking on the weak words.\n")
-    A("The two-stage decomposition therefore does not only cut the work (65536 → 128+256 = 384), **it recovers better**.\n")
+    A("On this set the two-stage decomposition therefore cuts the work (65536 -> 128+256 = 384 candidate evaluations)")
+    A("and also ranks the true value of these words first where the exhaustive search does not; this comparison is")
+    A("supplementary material and is not part of the paper.\n")
 else:
     A("For every word the true key or its complement falls in the top 2.\n")
 
 A("## 5. File layout\n")
 A("```")
 A("data/shadow64/s64_ref_25000.npz            traces 4096 x 25000")
+A("data/shadow32_fixedkey/s32_ref_12500.npz   Shadow-32 fixed-key traces, from which the sign of alpha is taken")
 A("firmware/shadow64_nop_newkey.c             acquisition firmware source (image not included)")
 A("reference/shadow64.c                       reference implementation (not used for acquisition)")
 A("analysis/cpa_s64_analysis.py               two-stage CPA + 16-bit exhaustive search")
@@ -283,13 +346,14 @@ A("analysis/shadow64_ks.py                    key schedule")
 A("analysis/fig_shadow64_trace.py             power trace figures, round period autocorrelation")
 A("results/RESULTS_shadow64.md                this document")
 A("figures/shadow64/")
-A("  stage1_8bit/stage1_RK1_*.png             stage 1 low byte 8-bit CPA (per word)")
-A("  stage2_16bit/stage2_RK1_*.png            stage 2 16-bit CPA, low byte fixed (per word)")
+A("  stage1_8bit/stage1_RK1_*.pdf (+ .png)    stage 1 low byte 8-bit CPA (per word)")
+A("  stage2_16bit/stage2_RK1_*.pdf (+ .png)   stage 2 16-bit CPA, low byte fixed (per word)")
 A("  exhaustive_16bit/exh_RK1_2_*.png         16-bit exhaustive search (RK1_2 only: |r| curves top256 /")
 A("                                           rank bars top24)")
-A("  trace.png, trace_zoom.png                power traces")
+A("  trace.pdf, trace.png, trace_zoom.png     power traces (fig_shadow64_trace.py; trace.pdf is Fig. 15 of the paper)")
 A("```\n")
-A("Reproduction : run `python cpa_s64_analysis.py` in `analysis/` (the default paths point to the layout above).")
+A("Reproduction : run `python cpa_s64_analysis.py` in `analysis/` (the default paths point to the layout above;")
+A("the script also reads `data/shadow32_fixedkey/s32_ref_12500.npz` for the sign of alpha).")
 A("The 16-bit exhaustive search comparison in Section 4 is supplementary and is not part of the paper.")
 
 _DOC = os.path.normpath(os.path.join(_HERE, "..", "results", "RESULTS_shadow64.md"))

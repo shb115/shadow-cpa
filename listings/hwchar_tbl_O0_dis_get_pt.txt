@@ -1,0 +1,73 @@
+
+simpleserial-hwchar-tbl-CWNANO.elf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+08000b2c <get_pt>:
+ 8000b2c:	b580      	push	{r7, lr}
+ 8000b2e:	b084      	sub	sp, #16
+ 8000b30:	af00      	add	r7, sp, #0
+ 8000b32:	6078      	str	r0, [r7, #4]
+ 8000b34:	000a      	movs	r2, r1
+ 8000b36:	1cfb      	adds	r3, r7, #3
+ 8000b38:	701a      	strb	r2, [r3, #0]
+ 8000b3a:	210b      	movs	r1, #11
+ 8000b3c:	187b      	adds	r3, r7, r1
+ 8000b3e:	687a      	ldr	r2, [r7, #4]
+ 8000b40:	7852      	ldrb	r2, [r2, #1]
+ 8000b42:	701a      	strb	r2, [r3, #0]
+ 8000b44:	187b      	adds	r3, r7, r1
+ 8000b46:	781b      	ldrb	r3, [r3, #0]
+ 8000b48:	2b02      	cmp	r3, #2
+ 8000b4a:	d102      	bne.n	8000b52 <get_pt+0x26>
+ 8000b4c:	4b1c      	ldr	r3, [pc, #112]	@ (8000bc0 <get_pt+0x94>)
+ 8000b4e:	60fb      	str	r3, [r7, #12]
+ 8000b50:	e001      	b.n	8000b56 <get_pt+0x2a>
+ 8000b52:	4b1c      	ldr	r3, [pc, #112]	@ (8000bc4 <get_pt+0x98>)
+ 8000b54:	60fb      	str	r3, [r7, #12]
+ 8000b56:	230b      	movs	r3, #11
+ 8000b58:	18fb      	adds	r3, r7, r3
+ 8000b5a:	781b      	ldrb	r3, [r3, #0]
+ 8000b5c:	2b00      	cmp	r3, #0
+ 8000b5e:	d10a      	bne.n	8000b76 <get_pt+0x4a>
+ 8000b60:	f000 fc4e 	bl	8001400 <trigger_high>
+ 8000b64:	68fa      	ldr	r2, [r7, #12]
+ 8000b66:	687b      	ldr	r3, [r7, #4]
+ 8000b68:	0011      	movs	r1, r2
+ 8000b6a:	0018      	movs	r0, r3
+ 8000b6c:	f7ff fbe4 	bl	8000338 <ev_fixed>
+ 8000b70:	f000 fc52 	bl	8001418 <trigger_low>
+ 8000b74:	e019      	b.n	8000baa <get_pt+0x7e>
+ 8000b76:	230b      	movs	r3, #11
+ 8000b78:	18fb      	adds	r3, r7, r3
+ 8000b7a:	781b      	ldrb	r3, [r3, #0]
+ 8000b7c:	2b03      	cmp	r3, #3
+ 8000b7e:	d10a      	bne.n	8000b96 <get_pt+0x6a>
+ 8000b80:	f000 fc3e 	bl	8001400 <trigger_high>
+ 8000b84:	4a0f      	ldr	r2, [pc, #60]	@ (8000bc4 <get_pt+0x98>)
+ 8000b86:	687b      	ldr	r3, [r7, #4]
+ 8000b88:	0011      	movs	r1, r2
+ 8000b8a:	0018      	movs	r0, r3
+ 8000b8c:	f7ff fe7c 	bl	8000888 <ev_table_pre>
+ 8000b90:	f000 fc42 	bl	8001418 <trigger_low>
+ 8000b94:	e009      	b.n	8000baa <get_pt+0x7e>
+ 8000b96:	f000 fc33 	bl	8001400 <trigger_high>
+ 8000b9a:	68fa      	ldr	r2, [r7, #12]
+ 8000b9c:	687b      	ldr	r3, [r7, #4]
+ 8000b9e:	0011      	movs	r1, r2
+ 8000ba0:	0018      	movs	r0, r3
+ 8000ba2:	f7ff fd1d 	bl	80005e0 <ev_table>
+ 8000ba6:	f000 fc37 	bl	8001418 <trigger_low>
+ 8000baa:	687b      	ldr	r3, [r7, #4]
+ 8000bac:	001a      	movs	r2, r3
+ 8000bae:	2110      	movs	r1, #16
+ 8000bb0:	2072      	movs	r0, #114	@ 0x72
+ 8000bb2:	f000 fac9 	bl	8001148 <simpleserial_put>
+ 8000bb6:	2300      	movs	r3, #0
+ 8000bb8:	0018      	movs	r0, r3
+ 8000bba:	46bd      	mov	sp, r7
+ 8000bbc:	b004      	add	sp, #16
+ 8000bbe:	bd80      	pop	{r7, pc}
+ 8000bc0:	20000000 	.word	0x20000000
+ 8000bc4:	20000200 	.word	0x20000200

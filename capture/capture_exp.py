@@ -1,31 +1,32 @@
 # -*- coding: utf-8 -*-
+# NOTE (artifact): acquisition script of the three unprotected trace sets (Shadow-32 fixed key,
+#   Shadow-32 ten keys, Shadow-64), ChipWhisperer-Nano.  The images are flashed from firmware/
+#   (not included; build them there with the makefile) and the trace files are written to
+#   data/shadow32_fixedkey/, data/shadow32_10keys/ and data/shadow64/.  The phase selection is
+#   recorded as `seekclip` in the `phase` field of the trace files, and the target is verified
+#   against the reference implementation with a known-answer test before capturing.
 # NOTE (artifact): Shadow-64 branch updated to match the deposited capture.
 #   firmware  shadow64_nop-CWNANO.hex -> shadow64_newkey-CWNANO.hex
 #   RK64      reference key 000102..0F -> random master key
 #             07E9A4B27E3FCB472DA757EA31CAF4ED (first round key 872C E3FB 644A 72D7)
-"""NOP 패딩 펌웨어 실험 수집 (7.5/7.5, seekclip 고진폭 위상).
+"""Acquisition of the unprotected experiments with the NOP-padded firmwares (clkout = adc =
+7.5 MHz, the high-amplitude `seekclip` phase).
 
-  python capture_exp.py s32d   -> Shadow-32 테이블 라운드키('d')  2048 x 12500
-  python capture_exp.py s32k   -> Shadow-32 서로 다른 10키('k')   2048 x 12500  (10세트)
-  python capture_exp.py s64 4096  -> Shadow-64 테이블 rk('p')     4096 x 25000
+  python capture_exp.py s32d      -> Shadow-32, the baked round-key table ('d'),  2048 x 12500
+  python capture_exp.py s32k      -> Shadow-32, ten different master keys ('k'),  2048 x 12500 each (ten sets)
+  python capture_exp.py s64 4096  -> Shadow-64, the baked round keys ('p'),       4096 x 25000
 
-트레이스 수는 두 번째 인자로 바꾼다(기본 2048). 공개한 Shadow-64 세트는 4096개다.
-data/masked/ 의 마스킹 파형은 이 스크립트가 아니라 별도 수집으로 얻었다.
+The trace count is overridden by the second argument (default 2048); the published Shadow-64 set
+has 4096 traces. The masked sets in data/masked/ and the two further fixed-key sets in
+data/shadow32_fixedkey/ were acquired with capture_lab.py, not with this script.
 
-공통: clkout 7.5MHz / adc 7.5MHz (1 sample/cycle), 위상은 **클리핑이 나올 때까지**
-리셋(seekclip) — 고진폭 위상이 SNR 이 6배 높다는 실측에 따른다.
+Common settings: clkout 7.5 MHz / adc 7.5 MHz (one sample per cycle); the clock phase is reset
+until one sample of a probe trace reaches 98% of the ADC full scale (seekclip, seek_clip_phase).
 """
 import os, sys, time
 try: sys.stdout.reconfigure(encoding="utf-8")
 except Exception: pass
 import numpy as np
-
-# Local workaround for a ChipWhisperer-Nano USB backend issue on the capture host.
-# Not required on a working install; ignore if the module is absent.
-try:
-    import cwnano_usb0_shim  # noqa: F401
-except ImportError:
-    pass
 import chipwhisperer as cw
 
 HERE     = os.path.dirname(os.path.abspath(__file__))
@@ -56,7 +57,7 @@ def _pack8(b, idx):
     return v
 
 def ks32(master8):
-    """8바이트 마스터키 -> rk[64] (펌웨어 shadow32_key_schedule 와 동일)."""
+    """8-byte master key -> rk[64] (the same function as shadow32_key_schedule in the firmware)."""
     K0=[0,1,2,3,8,9,10,11]; K1=[4,5,6,7,12,13,14,15]
     K2=[16,17,18,19,24,25,26,27]; K3=[20,21,22,23,28,29,30,31]
     b=[(master8[i>>3]>>(7-(i&7)))&1 for i in range(64)]; rk=[]
@@ -81,7 +82,7 @@ def enc32(pt, rk):
         l0,r0 = s1,s0
     return [r0,l1,l0,r1]
 
-# 10개 마스터키. 고정 시드라 실행할 때마다 같은 열 개가 나온다.
+# The ten master keys. The seed is fixed, so every run produces the same ten.
 _kr = np.random.default_rng(0x5241)
 MASTERS = [[int(x) for x in _kr.integers(0, 256, 8)] for _ in range(10)]
 
@@ -131,7 +132,7 @@ def connect(hexfile, samples):
     print("[SCOPE] clkout=%g adc=%g (%.2f s/cyc) samples=%d"
           % (scope.io.clkout, scope.adc.clk_freq,
              scope.adc.clk_freq/scope.io.clkout, scope.adc.samples), flush=True)
-    # 이미지는 번들에 넣지 않았다. firmware/ 에서 makefile 로 빌드하면 여기에 생긴다.
+    # The images are not included; building with the makefile in firmware/ puts them there.
     cw.program_target(scope, cw.programmers.STM32FProgrammer,
                       os.path.join(HERE, "..", "firmware", hexfile))
     print("[FLASH] %s" % hexfile, flush=True)
@@ -139,7 +140,7 @@ def connect(hexfile, samples):
 
 
 def seek_clip_phase(scope, target, cmdfn, ptlen, samples):
-    """클리핑이 나타나는 고진폭 위상을 찾을 때까지 위상 리셋."""
+    """Reset the clock phase until a high-amplitude phase, one at which the probe trace clips, is found."""
     for att in range(60):
         p = np.random.default_rng(9).integers(0, 256, ptlen, dtype=np.uint8)
         scope.arm(); target.simpleserial_write('p', bytearray(p.tobytes()))
@@ -149,7 +150,7 @@ def seek_clip_phase(scope, target, cmdfn, ptlen, samples):
         if (not to) and len(t) == samples:
             t = np.asarray(t, float)
             if t.max() >= 0.49 or t.min() <= -0.49:
-                print("[PHASE] seekclip 확보 @try%d max=%.3f min=%.3f"
+                print("[PHASE] seekclip found @try%d max=%.3f min=%.3f"
                       % (att, t.max(), t.min()), flush=True)
                 return
         print("[PHASE] try%d -> reset" % att, flush=True)
@@ -161,7 +162,7 @@ def seek_clip_phase(scope, target, cmdfn, ptlen, samples):
         try: target.flush()
         except Exception: pass
         cmdfn()
-    print("[WARN] seekclip 위상 실패", flush=True)
+    print("[WARN] no seekclip phase found", flush=True)
 
 
 def run_capture(scope, target, samples, ptlen, n=N_TRACES, seed=1234, tag=""):
@@ -198,7 +199,7 @@ def save(path, tr, pts, rk, samples, extra=None):
 def main():
     which = sys.argv[1]
     global N_TRACES
-    if len(sys.argv) > 2:            # 트레이스 수 override
+    if len(sys.argv) > 2:            # trace count override
         N_TRACES = int(sys.argv[2])
         print('[CFG] N_TRACES=%d' % N_TRACES, flush=True)
 
@@ -218,13 +219,13 @@ def main():
             target.simpleserial_write('p', bytearray(p))
             r=target.simpleserial_read('r',16,timeout=400)
             if r is None or list(r[:4]) != enc32(p, RK32_DEFAULT): bad += 1
-        print("[KAT] 불일치=%d -> %s" % (bad, "PASS" if bad==0 else "FAIL"), flush=True)
+        print("[KAT] mismatches=%d -> %s" % (bad, "PASS" if bad==0 else "FAIL"), flush=True)
         seek_clip_phase(scope, target, setd, 4, SAMPLES); setd()
         tr, pts, to, el = run_capture(scope, target, SAMPLES, 4, n=N_TRACES, tag="s32d")
         save(os.path.join(outdir, "s32_ref_12500.npz"), tr, pts,
              np.array(RK32_DEFAULT, np.uint8), SAMPLES,
              dict(cipher="shadow32", master=np.zeros(0, np.uint8)))
-        print("[DONE] s32d  타임아웃%d %.1f분" % (to, el/60), flush=True)
+        print("[DONE] s32d  timeouts %d %.1f min" % (to, el/60), flush=True)
         target.dis(); scope.dis()
 
     elif which == "s32k":
@@ -249,13 +250,13 @@ def main():
                 target.simpleserial_write('p', bytearray(p))
                 r=target.simpleserial_read('r',16,timeout=400)
                 if r is None or list(r[:4]) != enc32(p, rk): bad += 1
-            print("[KAT] key%02d 불일치=%d %s" % (j, bad, "PASS" if bad==0 else "FAIL"), flush=True)
+            print("[KAT] key%02d mismatches=%d %s" % (j, bad, "PASS" if bad==0 else "FAIL"), flush=True)
             tr, pts, to, el = run_capture(scope, target, SAMPLES, 4, n=N_TRACES,
                                           seed=2000+j, tag="key%02d" % j)
             save(os.path.join(outdir, "s32_key%02d_12500.npz" % j), tr, pts,
                  np.array(rk, np.uint8), SAMPLES,
                  dict(cipher="shadow32", master=np.array(m, np.uint8)))
-            print("[DONE] key%02d 타임아웃%d %.1f분" % (j, to, el/60), flush=True)
+            print("[DONE] key%02d timeouts %d %.1f min" % (j, to, el/60), flush=True)
         target.dis(); scope.dis()
 
     elif which == "s64":
@@ -271,17 +272,17 @@ def main():
             r=target.simpleserial_read('r',16,timeout=500)
             exp=enc64(w); got=[(r[2*i]<<8)|r[2*i+1] for i in range(4)] if r is not None else None
             if got != exp: bad += 1
-        print("[KAT] 불일치=%d -> %s" % (bad, "PASS" if bad==0 else "FAIL"), flush=True)
+        print("[KAT] mismatches=%d -> %s" % (bad, "PASS" if bad==0 else "FAIL"), flush=True)
         seek_clip_phase(scope, target, lambda: None, 8, SAMPLES)
         tr, pts, to, el = run_capture(scope, target, SAMPLES, 8, n=N_TRACES, tag="s64")
         save(os.path.join(outdir, "s64_ref_25000.npz"), tr, pts,
              np.array(RK64, np.uint16), SAMPLES,
              dict(cipher="shadow64", master=np.array(MASTER64, np.uint8)))
-        print("[DONE] s64 타임아웃%d %.1f분" % (to, el/60), flush=True)
+        print("[DONE] s64 timeouts %d %.1f min" % (to, el/60), flush=True)
         target.dis(); scope.dis()
 
     else:
-        raise SystemExit("사용: capture_exp.py s32d|s32k|s64")
+        raise SystemExit("usage: capture_exp.py s32d|s32k|s64 [n_traces]")
 
 
 if __name__ == "__main__":

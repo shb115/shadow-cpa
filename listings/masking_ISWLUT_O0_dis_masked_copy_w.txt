@@ -1,0 +1,29 @@
+
+masking_ISWLUT_O0-CWNANO.elf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+08000430 <masked_copy_w>:
+ 8000430:	b084      	sub	sp, #16
+ 8000432:	9003      	str	r0, [sp, #12]
+ 8000434:	9102      	str	r1, [sp, #8]
+ 8000436:	466b      	mov	r3, sp
+ 8000438:	3307      	adds	r3, #7
+ 800043a:	701a      	strb	r2, [r3, #0]
+ 800043c:	9a03      	ldr	r2, [sp, #12]
+ 800043e:	9902      	ldr	r1, [sp, #8]
+ 8000440:	466b      	mov	r3, sp
+ 8000442:	3307      	adds	r3, #7
+ 8000444:	7818      	ldrb	r0, [r3, #0]
+ 8000446:	0003      	movs	r3, r0
+ 8000448:	780b      	ldrb	r3, [r1, #0]
+ 800044a:	7013      	strb	r3, [r2, #0]
+ 800044c:	0003      	movs	r3, r0
+ 800044e:	7113      	strb	r3, [r2, #4]
+ 8000450:	790b      	ldrb	r3, [r1, #4]
+ 8000452:	7113      	strb	r3, [r2, #4]
+ 8000454:	0003      	movs	r3, r0
+ 8000456:	46c0      	nop			@ (mov r8, r8)
+ 8000458:	b004      	add	sp, #16
+ 800045a:	4770      	bx	lr

@@ -1,0 +1,344 @@
+
+simpleserial-hwchar-tbl-CWNANO.elf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+08000888 <ev_table_pre>:
+ 8000888:	b5f0      	push	{r4, r5, r6, r7, lr}
+ 800088a:	b083      	sub	sp, #12
+ 800088c:	af00      	add	r7, sp, #0
+ 800088e:	6078      	str	r0, [r7, #4]
+ 8000890:	6039      	str	r1, [r7, #0]
+ 8000892:	687b      	ldr	r3, [r7, #4]
+ 8000894:	683c      	ldr	r4, [r7, #0]
+ 8000896:	2000      	movs	r0, #0
+ 8000898:	2100      	movs	r1, #0
+ 800089a:	2200      	movs	r2, #0
+ 800089c:	4621      	mov	r1, r4
+ 800089e:	bf00      	nop
+ 80008a0:	bf00      	nop
+ 80008a2:	bf00      	nop
+ 80008a4:	bf00      	nop
+ 80008a6:	bf00      	nop
+ 80008a8:	bf00      	nop
+ 80008aa:	bf00      	nop
+ 80008ac:	bf00      	nop
+ 80008ae:	bf00      	nop
+ 80008b0:	bf00      	nop
+ 80008b2:	bf00      	nop
+ 80008b4:	bf00      	nop
+ 80008b6:	bf00      	nop
+ 80008b8:	bf00      	nop
+ 80008ba:	bf00      	nop
+ 80008bc:	bf00      	nop
+ 80008be:	bf00      	nop
+ 80008c0:	bf00      	nop
+ 80008c2:	bf00      	nop
+ 80008c4:	bf00      	nop
+ 80008c6:	bf00      	nop
+ 80008c8:	bf00      	nop
+ 80008ca:	bf00      	nop
+ 80008cc:	bf00      	nop
+ 80008ce:	bf00      	nop
+ 80008d0:	bf00      	nop
+ 80008d2:	bf00      	nop
+ 80008d4:	bf00      	nop
+ 80008d6:	bf00      	nop
+ 80008d8:	bf00      	nop
+ 80008da:	bf00      	nop
+ 80008dc:	bf00      	nop
+ 80008de:	bf00      	nop
+ 80008e0:	bf00      	nop
+ 80008e2:	bf00      	nop
+ 80008e4:	bf00      	nop
+ 80008e6:	bf00      	nop
+ 80008e8:	bf00      	nop
+ 80008ea:	bf00      	nop
+ 80008ec:	bf00      	nop
+ 80008ee:	bf00      	nop
+ 80008f0:	bf00      	nop
+ 80008f2:	bf00      	nop
+ 80008f4:	bf00      	nop
+ 80008f6:	bf00      	nop
+ 80008f8:	bf00      	nop
+ 80008fa:	bf00      	nop
+ 80008fc:	bf00      	nop
+ 80008fe:	bf00      	nop
+ 8000900:	bf00      	nop
+ 8000902:	bf00      	nop
+ 8000904:	bf00      	nop
+ 8000906:	bf00      	nop
+ 8000908:	bf00      	nop
+ 800090a:	bf00      	nop
+ 800090c:	bf00      	nop
+ 800090e:	bf00      	nop
+ 8000910:	bf00      	nop
+ 8000912:	bf00      	nop
+ 8000914:	bf00      	nop
+ 8000916:	bf00      	nop
+ 8000918:	bf00      	nop
+ 800091a:	bf00      	nop
+ 800091c:	bf00      	nop
+ 800091e:	bf00      	nop
+ 8000920:	bf00      	nop
+ 8000922:	bf00      	nop
+ 8000924:	bf00      	nop
+ 8000926:	bf00      	nop
+ 8000928:	bf00      	nop
+ 800092a:	bf00      	nop
+ 800092c:	bf00      	nop
+ 800092e:	bf00      	nop
+ 8000930:	bf00      	nop
+ 8000932:	bf00      	nop
+ 8000934:	bf00      	nop
+ 8000936:	bf00      	nop
+ 8000938:	bf00      	nop
+ 800093a:	bf00      	nop
+ 800093c:	bf00      	nop
+ 800093e:	bf00      	nop
+ 8000940:	bf00      	nop
+ 8000942:	bf00      	nop
+ 8000944:	bf00      	nop
+ 8000946:	bf00      	nop
+ 8000948:	bf00      	nop
+ 800094a:	bf00      	nop
+ 800094c:	bf00      	nop
+ 800094e:	bf00      	nop
+ 8000950:	bf00      	nop
+ 8000952:	bf00      	nop
+ 8000954:	bf00      	nop
+ 8000956:	bf00      	nop
+ 8000958:	bf00      	nop
+ 800095a:	bf00      	nop
+ 800095c:	bf00      	nop
+ 800095e:	bf00      	nop
+ 8000960:	bf00      	nop
+ 8000962:	bf00      	nop
+ 8000964:	bf00      	nop
+ 8000966:	781a      	ldrb	r2, [r3, #0]
+ 8000968:	bf00      	nop
+ 800096a:	bf00      	nop
+ 800096c:	bf00      	nop
+ 800096e:	bf00      	nop
+ 8000970:	bf00      	nop
+ 8000972:	bf00      	nop
+ 8000974:	bf00      	nop
+ 8000976:	bf00      	nop
+ 8000978:	bf00      	nop
+ 800097a:	bf00      	nop
+ 800097c:	bf00      	nop
+ 800097e:	bf00      	nop
+ 8000980:	bf00      	nop
+ 8000982:	bf00      	nop
+ 8000984:	bf00      	nop
+ 8000986:	bf00      	nop
+ 8000988:	bf00      	nop
+ 800098a:	bf00      	nop
+ 800098c:	bf00      	nop
+ 800098e:	bf00      	nop
+ 8000990:	bf00      	nop
+ 8000992:	bf00      	nop
+ 8000994:	bf00      	nop
+ 8000996:	bf00      	nop
+ 8000998:	bf00      	nop
+ 800099a:	bf00      	nop
+ 800099c:	bf00      	nop
+ 800099e:	bf00      	nop
+ 80009a0:	bf00      	nop
+ 80009a2:	bf00      	nop
+ 80009a4:	bf00      	nop
+ 80009a6:	bf00      	nop
+ 80009a8:	bf00      	nop
+ 80009aa:	bf00      	nop
+ 80009ac:	bf00      	nop
+ 80009ae:	bf00      	nop
+ 80009b0:	bf00      	nop
+ 80009b2:	bf00      	nop
+ 80009b4:	bf00      	nop
+ 80009b6:	bf00      	nop
+ 80009b8:	bf00      	nop
+ 80009ba:	bf00      	nop
+ 80009bc:	bf00      	nop
+ 80009be:	bf00      	nop
+ 80009c0:	bf00      	nop
+ 80009c2:	bf00      	nop
+ 80009c4:	bf00      	nop
+ 80009c6:	bf00      	nop
+ 80009c8:	bf00      	nop
+ 80009ca:	bf00      	nop
+ 80009cc:	bf00      	nop
+ 80009ce:	bf00      	nop
+ 80009d0:	bf00      	nop
+ 80009d2:	bf00      	nop
+ 80009d4:	bf00      	nop
+ 80009d6:	bf00      	nop
+ 80009d8:	bf00      	nop
+ 80009da:	bf00      	nop
+ 80009dc:	bf00      	nop
+ 80009de:	bf00      	nop
+ 80009e0:	bf00      	nop
+ 80009e2:	bf00      	nop
+ 80009e4:	bf00      	nop
+ 80009e6:	bf00      	nop
+ 80009e8:	bf00      	nop
+ 80009ea:	bf00      	nop
+ 80009ec:	bf00      	nop
+ 80009ee:	bf00      	nop
+ 80009f0:	bf00      	nop
+ 80009f2:	bf00      	nop
+ 80009f4:	bf00      	nop
+ 80009f6:	bf00      	nop
+ 80009f8:	bf00      	nop
+ 80009fa:	bf00      	nop
+ 80009fc:	bf00      	nop
+ 80009fe:	bf00      	nop
+ 8000a00:	bf00      	nop
+ 8000a02:	bf00      	nop
+ 8000a04:	bf00      	nop
+ 8000a06:	bf00      	nop
+ 8000a08:	bf00      	nop
+ 8000a0a:	789d      	ldrb	r5, [r3, #2]
+ 8000a0c:	78de      	ldrb	r6, [r3, #3]
+ 8000a0e:	4075      	eors	r5, r6
+ 8000a10:	19ae      	adds	r6, r5, r6
+ 8000a12:	402e      	ands	r6, r5
+ 8000a14:	00ed      	lsls	r5, r5, #3
+ 8000a16:	721e      	strb	r6, [r3, #8]
+ 8000a18:	791d      	ldrb	r5, [r3, #4]
+ 8000a1a:	4075      	eors	r5, r6
+ 8000a1c:	795e      	ldrb	r6, [r3, #5]
+ 8000a1e:	bf00      	nop
+ 8000a20:	bf00      	nop
+ 8000a22:	bf00      	nop
+ 8000a24:	bf00      	nop
+ 8000a26:	5c88      	ldrb	r0, [r1, r2]
+ 8000a28:	bf00      	nop
+ 8000a2a:	bf00      	nop
+ 8000a2c:	bf00      	nop
+ 8000a2e:	bf00      	nop
+ 8000a30:	bf00      	nop
+ 8000a32:	bf00      	nop
+ 8000a34:	bf00      	nop
+ 8000a36:	bf00      	nop
+ 8000a38:	bf00      	nop
+ 8000a3a:	bf00      	nop
+ 8000a3c:	bf00      	nop
+ 8000a3e:	bf00      	nop
+ 8000a40:	bf00      	nop
+ 8000a42:	bf00      	nop
+ 8000a44:	bf00      	nop
+ 8000a46:	bf00      	nop
+ 8000a48:	bf00      	nop
+ 8000a4a:	bf00      	nop
+ 8000a4c:	bf00      	nop
+ 8000a4e:	bf00      	nop
+ 8000a50:	bf00      	nop
+ 8000a52:	bf00      	nop
+ 8000a54:	bf00      	nop
+ 8000a56:	bf00      	nop
+ 8000a58:	bf00      	nop
+ 8000a5a:	bf00      	nop
+ 8000a5c:	bf00      	nop
+ 8000a5e:	bf00      	nop
+ 8000a60:	bf00      	nop
+ 8000a62:	bf00      	nop
+ 8000a64:	bf00      	nop
+ 8000a66:	bf00      	nop
+ 8000a68:	bf00      	nop
+ 8000a6a:	bf00      	nop
+ 8000a6c:	bf00      	nop
+ 8000a6e:	bf00      	nop
+ 8000a70:	bf00      	nop
+ 8000a72:	bf00      	nop
+ 8000a74:	bf00      	nop
+ 8000a76:	bf00      	nop
+ 8000a78:	bf00      	nop
+ 8000a7a:	bf00      	nop
+ 8000a7c:	bf00      	nop
+ 8000a7e:	bf00      	nop
+ 8000a80:	bf00      	nop
+ 8000a82:	bf00      	nop
+ 8000a84:	bf00      	nop
+ 8000a86:	bf00      	nop
+ 8000a88:	bf00      	nop
+ 8000a8a:	bf00      	nop
+ 8000a8c:	bf00      	nop
+ 8000a8e:	bf00      	nop
+ 8000a90:	bf00      	nop
+ 8000a92:	bf00      	nop
+ 8000a94:	bf00      	nop
+ 8000a96:	bf00      	nop
+ 8000a98:	bf00      	nop
+ 8000a9a:	bf00      	nop
+ 8000a9c:	bf00      	nop
+ 8000a9e:	bf00      	nop
+ 8000aa0:	bf00      	nop
+ 8000aa2:	bf00      	nop
+ 8000aa4:	bf00      	nop
+ 8000aa6:	bf00      	nop
+ 8000aa8:	bf00      	nop
+ 8000aaa:	bf00      	nop
+ 8000aac:	bf00      	nop
+ 8000aae:	bf00      	nop
+ 8000ab0:	bf00      	nop
+ 8000ab2:	bf00      	nop
+ 8000ab4:	bf00      	nop
+ 8000ab6:	bf00      	nop
+ 8000ab8:	bf00      	nop
+ 8000aba:	bf00      	nop
+ 8000abc:	bf00      	nop
+ 8000abe:	bf00      	nop
+ 8000ac0:	bf00      	nop
+ 8000ac2:	bf00      	nop
+ 8000ac4:	bf00      	nop
+ 8000ac6:	bf00      	nop
+ 8000ac8:	bf00      	nop
+ 8000aca:	bf00      	nop
+ 8000acc:	bf00      	nop
+ 8000ace:	bf00      	nop
+ 8000ad0:	bf00      	nop
+ 8000ad2:	bf00      	nop
+ 8000ad4:	bf00      	nop
+ 8000ad6:	bf00      	nop
+ 8000ad8:	bf00      	nop
+ 8000ada:	bf00      	nop
+ 8000adc:	bf00      	nop
+ 8000ade:	bf00      	nop
+ 8000ae0:	bf00      	nop
+ 8000ae2:	bf00      	nop
+ 8000ae4:	bf00      	nop
+ 8000ae6:	bf00      	nop
+ 8000ae8:	bf00      	nop
+ 8000aea:	bf00      	nop
+ 8000aec:	bf00      	nop
+ 8000aee:	bf00      	nop
+ 8000af0:	2000      	movs	r0, #0
+ 8000af2:	2100      	movs	r1, #0
+ 8000af4:	2200      	movs	r2, #0
+ 8000af6:	2500      	movs	r5, #0
+ 8000af8:	2600      	movs	r6, #0
+ 8000afa:	bf00      	nop
+ 8000afc:	bf00      	nop
+ 8000afe:	bf00      	nop
+ 8000b00:	bf00      	nop
+ 8000b02:	bf00      	nop
+ 8000b04:	bf00      	nop
+ 8000b06:	bf00      	nop
+ 8000b08:	bf00      	nop
+ 8000b0a:	bf00      	nop
+ 8000b0c:	bf00      	nop
+ 8000b0e:	bf00      	nop
+ 8000b10:	bf00      	nop
+ 8000b12:	bf00      	nop
+ 8000b14:	bf00      	nop
+ 8000b16:	bf00      	nop
+ 8000b18:	bf00      	nop
+ 8000b1a:	bf00      	nop
+ 8000b1c:	bf00      	nop
+ 8000b1e:	bf00      	nop
+ 8000b20:	bf00      	nop
+ 8000b22:	46c0      	nop			@ (mov r8, r8)
+ 8000b24:	46bd      	mov	sp, r7
+ 8000b26:	b003      	add	sp, #12
+ 8000b28:	bdf0      	pop	{r4, r5, r6, r7, pc}

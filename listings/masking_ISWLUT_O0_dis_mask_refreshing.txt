@@ -1,0 +1,40 @@
+
+masking_ISWLUT_O0-CWNANO.elf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+08000498 <mask_refreshing>:
+ 8000498:	b510      	push	{r4, lr}
+ 800049a:	b084      	sub	sp, #16
+ 800049c:	9003      	str	r0, [sp, #12]
+ 800049e:	9102      	str	r1, [sp, #8]
+ 80004a0:	0019      	movs	r1, r3
+ 80004a2:	466b      	mov	r3, sp
+ 80004a4:	3307      	adds	r3, #7
+ 80004a6:	701a      	strb	r2, [r3, #0]
+ 80004a8:	466b      	mov	r3, sp
+ 80004aa:	3306      	adds	r3, #6
+ 80004ac:	1c0a      	adds	r2, r1, #0
+ 80004ae:	701a      	strb	r2, [r3, #0]
+ 80004b0:	9a03      	ldr	r2, [sp, #12]
+ 80004b2:	9902      	ldr	r1, [sp, #8]
+ 80004b4:	466b      	mov	r3, sp
+ 80004b6:	3307      	adds	r3, #7
+ 80004b8:	7818      	ldrb	r0, [r3, #0]
+ 80004ba:	466b      	mov	r3, sp
+ 80004bc:	3306      	adds	r3, #6
+ 80004be:	781c      	ldrb	r4, [r3, #0]
+ 80004c0:	0023      	movs	r3, r4
+ 80004c2:	780b      	ldrb	r3, [r1, #0]
+ 80004c4:	4043      	eors	r3, r0
+ 80004c6:	7013      	strb	r3, [r2, #0]
+ 80004c8:	0023      	movs	r3, r4
+ 80004ca:	7113      	strb	r3, [r2, #4]
+ 80004cc:	790b      	ldrb	r3, [r1, #4]
+ 80004ce:	4043      	eors	r3, r0
+ 80004d0:	7113      	strb	r3, [r2, #4]
+ 80004d2:	0023      	movs	r3, r4
+ 80004d4:	46c0      	nop			@ (mov r8, r8)
+ 80004d6:	b004      	add	sp, #16
+ 80004d8:	bd10      	pop	{r4, pc}

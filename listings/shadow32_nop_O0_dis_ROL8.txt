@@ -1,0 +1,35 @@
+
+shadow32_nop_O0-CWNANO.elf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+08000338 <ROL8>:
+ 8000338:	b082      	sub	sp, #8
+ 800033a:	0002      	movs	r2, r0
+ 800033c:	9100      	str	r1, [sp, #0]
+ 800033e:	466b      	mov	r3, sp
+ 8000340:	3307      	adds	r3, #7
+ 8000342:	701a      	strb	r2, [r3, #0]
+ 8000344:	466b      	mov	r3, sp
+ 8000346:	3307      	adds	r3, #7
+ 8000348:	781a      	ldrb	r2, [r3, #0]
+ 800034a:	9b00      	ldr	r3, [sp, #0]
+ 800034c:	409a      	lsls	r2, r3
+ 800034e:	0013      	movs	r3, r2
+ 8000350:	b25a      	sxtb	r2, r3
+ 8000352:	466b      	mov	r3, sp
+ 8000354:	3307      	adds	r3, #7
+ 8000356:	7819      	ldrb	r1, [r3, #0]
+ 8000358:	9b00      	ldr	r3, [sp, #0]
+ 800035a:	2008      	movs	r0, #8
+ 800035c:	1ac3      	subs	r3, r0, r3
+ 800035e:	4119      	asrs	r1, r3
+ 8000360:	000b      	movs	r3, r1
+ 8000362:	b25b      	sxtb	r3, r3
+ 8000364:	4313      	orrs	r3, r2
+ 8000366:	b25b      	sxtb	r3, r3
+ 8000368:	b2db      	uxtb	r3, r3
+ 800036a:	0018      	movs	r0, r3
+ 800036c:	b002      	add	sp, #8
+ 800036e:	4770      	bx	lr

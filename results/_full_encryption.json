@@ -1,0 +1,433 @@
+{
+ "sets": {
+  "ISW_full": {
+   "file": "masking_ISW_v2_full_seed1_16384x46000.npz",
+   "implementation": "ISW",
+   "N": 16384,
+   "samples": 46000,
+   "meta": {
+    "key": [
+     13,
+     59,
+     96,
+     51
+    ],
+    "clkout": 7500000.0,
+    "adc_freq": 7500000.0,
+    "samples": 46000,
+    "version": "masking_ISW_v2_full",
+    "phase": "seekclip",
+    "fixed_pt": [
+     17,
+     34,
+     51,
+     68
+    ],
+    "seed": 1,
+    "firmware": "masking_ISW_v2_FULL-CWNANO.hex"
+   },
+   "pt_bytes": 200,
+   "n_fixed": 8192,
+   "n_random": 8192,
+   "round": {
+    "period": 3929,
+    "autocorr": 0.9134204285894596,
+    "rounds_covered": 11.707813693051667,
+    "complete_rounds": 11,
+    "samples_of_partial_round": 2781
+   },
+   "ttest": {
+    "order1": {
+     "window": [
+      0,
+      46000
+     ],
+     "max_abs_t": 37.47353773028271,
+     "at": 42080,
+     "t_at_max": -37.47353773028271,
+     "n_over": 1064,
+     "first_over": 290,
+     "last_over": 45985,
+     "clip_frac_at_max": 0.0,
+     "max_clip_frac_at_over": 0.98980712890625,
+     "per_round": [
+      78,
+      98,
+      89,
+      84,
+      97,
+      88,
+      108,
+      97,
+      78,
+      96,
+      90,
+      61
+     ]
+    },
+    "order2": {
+     "window": [
+      0,
+      46000
+     ],
+     "max_abs_t": 35.49017734685251,
+     "at": 27888,
+     "t_at_max": -35.49017734685251,
+     "n_over": 6925,
+     "first_over": 238,
+     "last_over": 45997,
+     "clip_frac_at_max": 0.0,
+     "max_clip_frac_at_over": 0.98980712890625,
+     "per_round": [
+      594,
+      581,
+      600,
+      604,
+      620,
+      607,
+      651,
+      634,
+      535,
+      571,
+      573,
+      355
+     ]
+    }
+   },
+   "noise": {
+    "sd_random": 0.010563470022782748,
+    "sd_codes": 2.7042483258323835,
+    "detectable_8192": {
+     "in_sd": 0.0703125,
+     "in_codes": 0.19014246041008948
+    }
+   },
+   "clip": {
+    "frac_overall": 0.02048004017705503,
+    "n_samples_clipped_in_every_trace": 395
+   }
+  },
+  "ISWLUT_full": {
+   "file": "masking_ISWLUT_v2_full_seed1_16384x46000.npz",
+   "implementation": "table recomputation",
+   "N": 16384,
+   "samples": 46000,
+   "meta": {
+    "key": [
+     13,
+     59,
+     96,
+     51
+    ],
+    "clkout": 7500000.0,
+    "adc_freq": 7500000.0,
+    "samples": 46000,
+    "version": "masking_ISWLUT_v2_full",
+    "phase": "seekclip",
+    "fixed_pt": [
+     17,
+     34,
+     51,
+     68
+    ],
+    "seed": 1,
+    "firmware": "masking_ISWLUT_v2_FULL-CWNANO.hex"
+   },
+   "pt_bytes": 200,
+   "n_fixed": 8192,
+   "n_random": 8192,
+   "round": {
+    "period": 44192,
+    "autocorr": 0.03921942915013464,
+    "rounds_covered": 1.0409123823316437,
+    "complete_rounds": 1,
+    "samples_of_partial_round": 1808
+   },
+   "table_builds": [
+    {
+     "start": 284,
+     "end": 10763,
+     "length": 10479,
+     "entries": 255.6
+    },
+    {
+     "start": 11250,
+     "end": 21729,
+     "length": 10479,
+     "entries": 255.6
+    },
+    {
+     "start": 22217,
+     "end": 32696,
+     "length": 10479,
+     "entries": 255.6
+    },
+    {
+     "start": 33186,
+     "end": 43665,
+     "length": 10479,
+     "entries": 255.6
+    }
+   ],
+   "ttest": {
+    "order1": {
+     "window": [
+      0,
+      46000
+     ],
+     "max_abs_t": 6.3319948719332535,
+     "at": 10827,
+     "t_at_max": -6.3319948719332535,
+     "n_over": 3,
+     "first_over": 10827,
+     "last_over": 21793,
+     "over_samples": [
+      10827,
+      21790,
+      21793
+     ],
+     "over_t": [
+      -6.33,
+      -4.93,
+      -5.83
+     ],
+     "clip_frac_at_max": 0.0,
+     "clip_frac_at_over": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "max_clip_frac_at_over": 0.0,
+     "per_round": [
+      3,
+      0
+     ],
+     "location": {
+      "10827": {
+       "builds_completed": 1,
+       "inside_build": false,
+       "cycles_after_build_end": 64
+      },
+      "21790": {
+       "builds_completed": 2,
+       "inside_build": false,
+       "cycles_after_build_end": 61
+      },
+      "21793": {
+       "builds_completed": 2,
+       "inside_build": false,
+       "cycles_after_build_end": 64
+      }
+     }
+    },
+    "order2": {
+     "window": [
+      0,
+      46000
+     ],
+     "max_abs_t": 6.279123064531457,
+     "at": 10827,
+     "t_at_max": 6.279123064531457,
+     "n_over": 6,
+     "first_over": 10826,
+     "last_over": 21792,
+     "over_samples": [
+      10826,
+      10827,
+      10888,
+      10889,
+      10891,
+      21792
+     ],
+     "over_t": [
+      5.3,
+      6.28,
+      -5.19,
+      -4.51,
+      -4.82,
+      4.55
+     ],
+     "clip_frac_at_max": 0.0,
+     "clip_frac_at_over": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ],
+     "max_clip_frac_at_over": 0.0,
+     "per_round": [
+      6,
+      0
+     ],
+     "location": {
+      "10826": {
+       "builds_completed": 1,
+       "inside_build": false,
+       "cycles_after_build_end": 63
+      },
+      "10827": {
+       "builds_completed": 1,
+       "inside_build": false,
+       "cycles_after_build_end": 64
+      },
+      "10888": {
+       "builds_completed": 1,
+       "inside_build": false,
+       "cycles_after_build_end": 125
+      },
+      "10889": {
+       "builds_completed": 1,
+       "inside_build": false,
+       "cycles_after_build_end": 126
+      },
+      "10891": {
+       "builds_completed": 1,
+       "inside_build": false,
+       "cycles_after_build_end": 128
+      },
+      "21792": {
+       "builds_completed": 2,
+       "inside_build": false,
+       "cycles_after_build_end": 63
+      }
+     }
+    }
+   },
+   "noise": {
+    "sd_random": 0.013404882644700822,
+    "sd_codes": 3.4316499570434105,
+    "detectable_8192": {
+     "in_sd": 0.0703125,
+     "in_codes": 0.2412878876046148
+    }
+   },
+   "clip": {
+    "frac_overall": 0.025286480447520382,
+    "n_samples_clipped_in_every_trace": 418
+   }
+  }
+ },
+ "one_round": {
+  "ISWLUT_seed1": {
+   "table_builds": [
+    {
+     "start": 229,
+     "end": 10708,
+     "length": 10479,
+     "entries": 255.6
+    },
+    {
+     "start": 11195,
+     "end": 21674,
+     "length": 10479,
+     "entries": 255.6
+    },
+    {
+     "start": 22162,
+     "end": 32641,
+     "length": 10479,
+     "entries": 255.6
+    },
+    {
+     "start": 33131,
+     "end": 43610,
+     "length": 10479,
+     "entries": 255.6
+    }
+   ],
+   "order1": {
+    "3": {
+     "builds_completed": 0,
+     "inside_build": false,
+     "cycles_after_build_end": null
+    },
+    "10772": {
+     "builds_completed": 1,
+     "inside_build": false,
+     "cycles_after_build_end": 64
+    }
+   },
+   "order2": {
+    "10771": {
+     "builds_completed": 1,
+     "inside_build": false,
+     "cycles_after_build_end": 63
+    },
+    "10772": {
+     "builds_completed": 1,
+     "inside_build": false,
+     "cycles_after_build_end": 64
+    },
+    "10833": {
+     "builds_completed": 1,
+     "inside_build": false,
+     "cycles_after_build_end": 125
+    }
+   }
+  },
+  "ISWLUT_seed2": {
+   "table_builds": [
+    {
+     "start": 229,
+     "end": 10708,
+     "length": 10479,
+     "entries": 255.6
+    },
+    {
+     "start": 11195,
+     "end": 21674,
+     "length": 10479,
+     "entries": 255.6
+    },
+    {
+     "start": 22162,
+     "end": 32641,
+     "length": 10479,
+     "entries": 255.6
+    },
+    {
+     "start": 33131,
+     "end": 43610,
+     "length": 10479,
+     "entries": 255.6
+    }
+   ],
+   "order1": {
+    "10772": {
+     "builds_completed": 1,
+     "inside_build": false,
+     "cycles_after_build_end": 64
+    },
+    "21738": {
+     "builds_completed": 2,
+     "inside_build": false,
+     "cycles_after_build_end": 64
+    }
+   },
+   "order2": {
+    "10769": {
+     "builds_completed": 1,
+     "inside_build": false,
+     "cycles_after_build_end": 61
+    },
+    "10771": {
+     "builds_completed": 1,
+     "inside_build": false,
+     "cycles_after_build_end": 63
+    },
+    "21736": {
+     "builds_completed": 2,
+     "inside_build": false,
+     "cycles_after_build_end": 62
+    },
+    "21737": {
+     "builds_completed": 2,
+     "inside_build": false,
+     "cycles_after_build_end": 63
+    }
+   }
+  }
+ }
+}

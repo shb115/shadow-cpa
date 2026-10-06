@@ -1,10 +1,13 @@
-# Power traces — archived on Zenodo, see README.md
+# Power traces, archived on Zenodo, see README.md
 data/*
 !data/.gitkeep
 
 # Figures written by the analysis code
 figures/
 results/*.png
+
+# Console logs of the capture scripts
+capture/logs/
 
 # Build products
 *.hex
@@ -17,3 +20,6 @@ selftest.exe
 __pycache__/
 *.py[cod]
 .ipynb_checkpoints/
+
+# Regenerated sidecars of the analysis scripts
+results/_*.npz

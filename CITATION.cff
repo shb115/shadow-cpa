@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: >-
   If you use this software, please cite it using the metadata in this file,
-  together with the power traces it analyses (listed under references). The
+  together with the power traces it analyzes (listed under references). The
   accompanying paper is under review; its citation will be added here once it
   is published.
 title: >-
@@ -17,7 +17,9 @@ authors:
     affiliation: "Korea University, School of Cybersecurity, Seoul, Republic of Korea"
   - family-names: Kim
     given-names: Sunyeop
-    affiliation: "Korea University, School of Cybersecurity, Seoul, Republic of Korea"
+    affiliation: >-
+      Korea University, School of Cybersecurity, Seoul, Republic of Korea; Nanyang
+      Technological University, Singapore
   - family-names: Jang
     given-names: Jihoon
     affiliation: "Korea University, School of Cybersecurity, Seoul, Republic of Korea"
@@ -34,20 +36,26 @@ contact:
   - family-names: Kwon
     given-names: Donggeun
     email: dgkwon@kunsan.ac.kr
-# Archived release v1.0. The concept DOI 10.5281/zenodo.21731939 always
-# resolves to the latest version.
+# Concept DOI of the archived releases; it always resolves to the latest version.
+# The version tag and the release date of each archived release are those of the
+# corresponding Zenodo version.
 doi: 10.5281/zenodo.21731939
+repository-code: https://github.com/shb115/shadow-cpa
 license: MIT
 abstract: >-
-  Target firmware, acquisition script and analysis code for a non-profiling
+  Target firmware, acquisition scripts and analysis code for a non-profiling
   correlation power analysis of the Shadow lightweight block cipher. All traces
   were acquired on a ChipWhisperer-Nano capture board with its on-board
   STM32F030F4 target, clocked at 7.5 MHz with one sample per clock cycle and
-  firmware built at optimisation level -O0. The code covers Shadow-32 with a
-  fixed key, Shadow-32 with ten independently chosen keys, and Shadow-64,
-  together with a fixed-versus-random t-test of two masked Shadow-32
-  implementations. The power traces it analyses are archived separately; see
-  the related identifier below.
+  firmware built at optimization level -O0. The code covers Shadow-32 with a
+  fixed key, Shadow-32 with ten independently chosen keys, and Shadow-64, the
+  fixed-key attack at two further clock phases, the characterization of the
+  leakage model on the device, and the attack and the fixed-versus-random
+  t-tests, at first and second order, of two masked Shadow-32 implementations
+  (an ISW gadget and table recomputation with register overwriting), each over
+  one whole masked round in two independent acquisitions and over the full
+  16-round encryption. The power traces it analyzes are archived separately;
+  see the related identifier below.
 keywords:
   - side-channel analysis
   - correlation power analysis
@@ -73,4 +81,5 @@ references:
         given-names: Myoungsu
       - family-names: Kwon
         given-names: Donggeun
-    doi: 10.5281/zenodo.21721710
+    # concept DOI of the trace record (all versions); the first version is 10.5281/zenodo.21721710
+    doi: 10.5281/zenodo.21721709

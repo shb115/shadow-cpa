@@ -1,0 +1,1184 @@
+{
+ "sets": {
+  "selected": {
+   "label": "selected phase (the paper's set)",
+   "file": "s32_ref_12500.npz",
+   "N": 2048,
+   "samples": 12500,
+   "phase": "seekclip",
+   "firmware": null,
+   "version": null,
+   "rk_round1": "0D 3B 60 33",
+   "round_structure": {
+    "period": 748,
+    "boundary": 358,
+    "round1": [
+     358,
+     1106
+    ],
+    "rounds1to4": [
+     358,
+     3350
+    ]
+   },
+   "amplitude": {
+    "max": 0.49609375,
+    "min": -0.22265625,
+    "frac_at_rail_all": 0.0206346484375,
+    "frac_at_rail_rounds1to4": 0.020363384389622326,
+    "frac_at_rail_round1": 0.020419034090909092,
+    "traces_with_a_rail_sample": 2048,
+    "negative_rail_reached": false
+   },
+   "algorithm1": {
+    "recovered": "0D 3B 60 33 43 60 25 3C 13 25 89 C5 3C 89 0D 5D",
+    "reference": "0D 3B 60 33 43 60 25 3C 13 25 89 C5 3C 89 0D 5D",
+    "matching_bytes": 16,
+    "success": true,
+    "alpha": 1.0,
+    "noise_level": 0.09943689110435824,
+    "decision": {
+     "pair": [
+      13,
+      242
+     ],
+     "p": 13,
+     "P2": 0.8107959550086169,
+     "P2s": 0.08817536506273892,
+     "D": 0.722620589945878
+    },
+    "round1": {
+     "h0": {
+      "rho_correct": 0.8963001389754982,
+      "sample": 548,
+      "rank256": 1,
+      "best_wrong": 0.7932584524967665,
+      "traces_at_rail_at_peak": 0
+     },
+     "h1": {
+      "rho_correct": 0.9000032473862036,
+      "sample": 709,
+      "rank256": 1,
+      "best_wrong": 0.7713884412109681,
+      "traces_at_rail_at_peak": 0
+     },
+     "h2": {
+      "rho_correct": 0.8107959550086169,
+      "sample": 636,
+      "rank256": 1,
+      "best_wrong": 0.6298803202203802,
+      "traces_at_rail_at_peak": 0
+     },
+     "h3": {
+      "rho_correct": 0.7952759489168958,
+      "sample": 796,
+      "rank256": 1,
+      "best_wrong": 0.623388323646999,
+      "traces_at_rail_at_peak": 0
+     }
+    },
+    "h2star_max_rho": 0.08817536506273892
+   },
+   "snr_h0": {
+    "class_counts": [
+     3,
+     59,
+     192,
+     465,
+     568,
+     443,
+     250,
+     59,
+     9
+    ],
+    "classes_with_more_than_5_traces": {
+     "classes": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+     ],
+     "max": 12.422924215331035,
+     "at": 548
+    },
+    "all_classes": {
+     "classes": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+     ],
+     "max": 20.59981206774372,
+     "at": 548
+    }
+   },
+   "success_rate_round1": [
+    {
+     "N": 16,
+     "subsets": 20,
+     "RK1_0": 8,
+     "RK1_1": 17,
+     "RK1_2": 10,
+     "RK1_3": 3,
+     "pair": 8,
+     "decision": 6,
+     "joint": 1,
+     "joint_signed_peak_rule": 1,
+     "per_subkey_signed_peak_rule": [
+      8,
+      17,
+      10,
+      3
+     ]
+    },
+    {
+     "N": 24,
+     "subsets": 20,
+     "RK1_0": 15,
+     "RK1_1": 20,
+     "RK1_2": 14,
+     "RK1_3": 13,
+     "pair": 15,
+     "decision": 13,
+     "joint": 6,
+     "joint_signed_peak_rule": 6,
+     "per_subkey_signed_peak_rule": [
+      15,
+      20,
+      14,
+      13
+     ]
+    },
+    {
+     "N": 32,
+     "subsets": 20,
+     "RK1_0": 18,
+     "RK1_1": 20,
+     "RK1_2": 20,
+     "RK1_3": 17,
+     "pair": 18,
+     "decision": 18,
+     "joint": 15,
+     "joint_signed_peak_rule": 15,
+     "per_subkey_signed_peak_rule": [
+      18,
+      20,
+      20,
+      17
+     ]
+    },
+    {
+     "N": 48,
+     "subsets": 20,
+     "RK1_0": 20,
+     "RK1_1": 19,
+     "RK1_2": 19,
+     "RK1_3": 18,
+     "pair": 20,
+     "decision": 20,
+     "joint": 16,
+     "joint_signed_peak_rule": 16,
+     "per_subkey_signed_peak_rule": [
+      20,
+      19,
+      19,
+      18
+     ]
+    },
+    {
+     "N": 64,
+     "subsets": 20,
+     "RK1_0": 20,
+     "RK1_1": 20,
+     "RK1_2": 20,
+     "RK1_3": 20,
+     "pair": 20,
+     "decision": 20,
+     "joint": 20,
+     "joint_signed_peak_rule": 20,
+     "per_subkey_signed_peak_rule": [
+      20,
+      20,
+      20,
+      20
+     ]
+    },
+    {
+     "N": 96,
+     "subsets": 20,
+     "RK1_0": 20,
+     "RK1_1": 20,
+     "RK1_2": 20,
+     "RK1_3": 20,
+     "pair": 20,
+     "decision": 20,
+     "joint": 20,
+     "joint_signed_peak_rule": 20,
+     "per_subkey_signed_peak_rule": [
+      20,
+      20,
+      20,
+      20
+     ]
+    },
+    {
+     "N": 128,
+     "subsets": 16,
+     "RK1_0": 16,
+     "RK1_1": 16,
+     "RK1_2": 16,
+     "RK1_3": 16,
+     "pair": 16,
+     "decision": 16,
+     "joint": 16,
+     "joint_signed_peak_rule": 16,
+     "per_subkey_signed_peak_rule": [
+      16,
+      16,
+      16,
+      16
+     ]
+    },
+    {
+     "N": 192,
+     "subsets": 10,
+     "RK1_0": 10,
+     "RK1_1": 10,
+     "RK1_2": 10,
+     "RK1_3": 10,
+     "pair": 10,
+     "decision": 10,
+     "joint": 10,
+     "joint_signed_peak_rule": 10,
+     "per_subkey_signed_peak_rule": [
+      10,
+      10,
+      10,
+      10
+     ]
+    },
+    {
+     "N": 256,
+     "subsets": 8,
+     "RK1_0": 8,
+     "RK1_1": 8,
+     "RK1_2": 8,
+     "RK1_3": 8,
+     "pair": 8,
+     "decision": 8,
+     "joint": 8,
+     "joint_signed_peak_rule": 8,
+     "per_subkey_signed_peak_rule": [
+      8,
+      8,
+      8,
+      8
+     ]
+    },
+    {
+     "N": 384,
+     "subsets": 5,
+     "RK1_0": 5,
+     "RK1_1": 5,
+     "RK1_2": 5,
+     "RK1_3": 5,
+     "pair": 5,
+     "decision": 5,
+     "joint": 5,
+     "joint_signed_peak_rule": 5,
+     "per_subkey_signed_peak_rule": [
+      5,
+      5,
+      5,
+      5
+     ]
+    },
+    {
+     "N": 512,
+     "subsets": 4,
+     "RK1_0": 4,
+     "RK1_1": 4,
+     "RK1_2": 4,
+     "RK1_3": 4,
+     "pair": 4,
+     "decision": 4,
+     "joint": 4,
+     "joint_signed_peak_rule": 4,
+     "per_subkey_signed_peak_rule": [
+      4,
+      4,
+      4,
+      4
+     ]
+    },
+    {
+     "N": 768,
+     "subsets": 2,
+     "RK1_0": 2,
+     "RK1_1": 2,
+     "RK1_2": 2,
+     "RK1_3": 2,
+     "pair": 2,
+     "decision": 2,
+     "joint": 2,
+     "joint_signed_peak_rule": 2,
+     "per_subkey_signed_peak_rule": [
+      2,
+      2,
+      2,
+      2
+     ]
+    },
+    {
+     "N": 1024,
+     "subsets": 2,
+     "RK1_0": 2,
+     "RK1_1": 2,
+     "RK1_2": 2,
+     "RK1_3": 2,
+     "pair": 2,
+     "decision": 2,
+     "joint": 2,
+     "joint_signed_peak_rule": 2,
+     "per_subkey_signed_peak_rule": [
+      2,
+      2,
+      2,
+      2
+     ]
+    },
+    {
+     "N": 2048,
+     "subsets": 1,
+     "RK1_0": 1,
+     "RK1_1": 1,
+     "RK1_2": 1,
+     "RK1_3": 1,
+     "pair": 1,
+     "decision": 1,
+     "joint": 1,
+     "joint_signed_peak_rule": 1,
+     "per_subkey_signed_peak_rule": [
+      1,
+      1,
+      1,
+      1
+     ]
+    }
+   ],
+   "first_N": {
+    "joint": 64,
+    "joint_signed_peak_rule": 64,
+    "decision": 48,
+    "RK1_0": 48,
+    "RK1_1": 64,
+    "RK1_2": 64,
+    "RK1_3": 64
+   }
+  },
+  "fixed": {
+   "label": "phase at power-on, not selected",
+   "file": "s32_shadow32_O0_fixedphase_12500.npz",
+   "N": 2048,
+   "samples": 12500,
+   "phase": "fixed (no phase selection)",
+   "firmware": "shadow32_nop_O0-CWNANO.hex",
+   "version": "shadow32_O0_fixedphase",
+   "rk_round1": "0D 3B 60 33",
+   "round_structure": {
+    "period": 748,
+    "boundary": 358,
+    "round1": [
+     358,
+     1106
+    ],
+    "rounds1to4": [
+     358,
+     3350
+    ]
+   },
+   "amplitude": {
+    "max": 0.49609375,
+    "min": -0.23046875,
+    "frac_at_rail_all": 0.0200588671875,
+    "frac_at_rail_rounds1to4": 0.019715497837984625,
+    "frac_at_rail_round1": 0.019723820813836897,
+    "traces_with_a_rail_sample": 2048,
+    "negative_rail_reached": false
+   },
+   "algorithm1": {
+    "recovered": "0D 3B 60 33 43 60 25 3C 13 25 89 C5 3C 89 0D 5D",
+    "reference": "0D 3B 60 33 43 60 25 3C 13 25 89 C5 3C 89 0D 5D",
+    "matching_bytes": 16,
+    "success": true,
+    "alpha": 1.0,
+    "noise_level": 0.09943689110435824,
+    "decision": {
+     "pair": [
+      13,
+      242
+     ],
+     "p": 13,
+     "P2": 0.8062771494067658,
+     "P2s": 0.09102512145600415,
+     "D": 0.7152520279507616
+    },
+    "round1": {
+     "h0": {
+      "rho_correct": 0.8939273832954583,
+      "sample": 548,
+      "rank256": 1,
+      "best_wrong": 0.7765148522725335,
+      "traces_at_rail_at_peak": 0
+     },
+     "h1": {
+      "rho_correct": 0.901814686690533,
+      "sample": 976,
+      "rank256": 1,
+      "best_wrong": 0.7677121214039044,
+      "traces_at_rail_at_peak": 0
+     },
+     "h2": {
+      "rho_correct": 0.8062771494067658,
+      "sample": 635,
+      "rank256": 1,
+      "best_wrong": 0.6244952289841036,
+      "traces_at_rail_at_peak": 0
+     },
+     "h3": {
+      "rho_correct": 0.8021509039412842,
+      "sample": 796,
+      "rank256": 1,
+      "best_wrong": 0.6127875400513108,
+      "traces_at_rail_at_peak": 0
+     }
+    },
+    "h2star_max_rho": 0.09102512145600415
+   },
+   "snr_h0": {
+    "class_counts": [
+     3,
+     59,
+     192,
+     465,
+     568,
+     443,
+     250,
+     59,
+     9
+    ],
+    "classes_with_more_than_5_traces": {
+     "classes": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+     ],
+     "max": 11.493646348806626,
+     "at": 548
+    },
+    "all_classes": {
+     "classes": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+     ],
+     "max": 15.850750107560899,
+     "at": 548
+    }
+   },
+   "success_rate_round1": [
+    {
+     "N": 16,
+     "subsets": 20,
+     "RK1_0": 11,
+     "RK1_1": 12,
+     "RK1_2": 8,
+     "RK1_3": 3,
+     "pair": 11,
+     "decision": 5,
+     "joint": 0,
+     "joint_signed_peak_rule": 0,
+     "per_subkey_signed_peak_rule": [
+      11,
+      12,
+      8,
+      3
+     ]
+    },
+    {
+     "N": 24,
+     "subsets": 20,
+     "RK1_0": 17,
+     "RK1_1": 17,
+     "RK1_2": 19,
+     "RK1_3": 13,
+     "pair": 17,
+     "decision": 14,
+     "joint": 9,
+     "joint_signed_peak_rule": 9,
+     "per_subkey_signed_peak_rule": [
+      17,
+      17,
+      19,
+      13
+     ]
+    },
+    {
+     "N": 32,
+     "subsets": 20,
+     "RK1_0": 18,
+     "RK1_1": 19,
+     "RK1_2": 20,
+     "RK1_3": 18,
+     "pair": 18,
+     "decision": 18,
+     "joint": 16,
+     "joint_signed_peak_rule": 16,
+     "per_subkey_signed_peak_rule": [
+      18,
+      19,
+      20,
+      18
+     ]
+    },
+    {
+     "N": 48,
+     "subsets": 20,
+     "RK1_0": 20,
+     "RK1_1": 20,
+     "RK1_2": 20,
+     "RK1_3": 20,
+     "pair": 20,
+     "decision": 20,
+     "joint": 20,
+     "joint_signed_peak_rule": 20,
+     "per_subkey_signed_peak_rule": [
+      20,
+      20,
+      20,
+      20
+     ]
+    },
+    {
+     "N": 64,
+     "subsets": 20,
+     "RK1_0": 20,
+     "RK1_1": 20,
+     "RK1_2": 20,
+     "RK1_3": 20,
+     "pair": 20,
+     "decision": 20,
+     "joint": 20,
+     "joint_signed_peak_rule": 20,
+     "per_subkey_signed_peak_rule": [
+      20,
+      20,
+      20,
+      20
+     ]
+    },
+    {
+     "N": 96,
+     "subsets": 20,
+     "RK1_0": 20,
+     "RK1_1": 20,
+     "RK1_2": 20,
+     "RK1_3": 20,
+     "pair": 20,
+     "decision": 20,
+     "joint": 20,
+     "joint_signed_peak_rule": 20,
+     "per_subkey_signed_peak_rule": [
+      20,
+      20,
+      20,
+      20
+     ]
+    },
+    {
+     "N": 128,
+     "subsets": 16,
+     "RK1_0": 16,
+     "RK1_1": 16,
+     "RK1_2": 16,
+     "RK1_3": 16,
+     "pair": 16,
+     "decision": 16,
+     "joint": 16,
+     "joint_signed_peak_rule": 16,
+     "per_subkey_signed_peak_rule": [
+      16,
+      16,
+      16,
+      16
+     ]
+    },
+    {
+     "N": 192,
+     "subsets": 10,
+     "RK1_0": 10,
+     "RK1_1": 10,
+     "RK1_2": 10,
+     "RK1_3": 10,
+     "pair": 10,
+     "decision": 10,
+     "joint": 10,
+     "joint_signed_peak_rule": 10,
+     "per_subkey_signed_peak_rule": [
+      10,
+      10,
+      10,
+      10
+     ]
+    },
+    {
+     "N": 256,
+     "subsets": 8,
+     "RK1_0": 8,
+     "RK1_1": 8,
+     "RK1_2": 8,
+     "RK1_3": 8,
+     "pair": 8,
+     "decision": 8,
+     "joint": 8,
+     "joint_signed_peak_rule": 8,
+     "per_subkey_signed_peak_rule": [
+      8,
+      8,
+      8,
+      8
+     ]
+    },
+    {
+     "N": 384,
+     "subsets": 5,
+     "RK1_0": 5,
+     "RK1_1": 5,
+     "RK1_2": 5,
+     "RK1_3": 5,
+     "pair": 5,
+     "decision": 5,
+     "joint": 5,
+     "joint_signed_peak_rule": 5,
+     "per_subkey_signed_peak_rule": [
+      5,
+      5,
+      5,
+      5
+     ]
+    },
+    {
+     "N": 512,
+     "subsets": 4,
+     "RK1_0": 4,
+     "RK1_1": 4,
+     "RK1_2": 4,
+     "RK1_3": 4,
+     "pair": 4,
+     "decision": 4,
+     "joint": 4,
+     "joint_signed_peak_rule": 4,
+     "per_subkey_signed_peak_rule": [
+      4,
+      4,
+      4,
+      4
+     ]
+    },
+    {
+     "N": 768,
+     "subsets": 2,
+     "RK1_0": 2,
+     "RK1_1": 2,
+     "RK1_2": 2,
+     "RK1_3": 2,
+     "pair": 2,
+     "decision": 2,
+     "joint": 2,
+     "joint_signed_peak_rule": 2,
+     "per_subkey_signed_peak_rule": [
+      2,
+      2,
+      2,
+      2
+     ]
+    },
+    {
+     "N": 1024,
+     "subsets": 2,
+     "RK1_0": 2,
+     "RK1_1": 2,
+     "RK1_2": 2,
+     "RK1_3": 2,
+     "pair": 2,
+     "decision": 2,
+     "joint": 2,
+     "joint_signed_peak_rule": 2,
+     "per_subkey_signed_peak_rule": [
+      2,
+      2,
+      2,
+      2
+     ]
+    },
+    {
+     "N": 2048,
+     "subsets": 1,
+     "RK1_0": 1,
+     "RK1_1": 1,
+     "RK1_2": 1,
+     "RK1_3": 1,
+     "pair": 1,
+     "decision": 1,
+     "joint": 1,
+     "joint_signed_peak_rule": 1,
+     "per_subkey_signed_peak_rule": [
+      1,
+      1,
+      1,
+      1
+     ]
+    }
+   ],
+   "first_N": {
+    "joint": 48,
+    "joint_signed_peak_rule": 48,
+    "decision": 48,
+    "RK1_0": 48,
+    "RK1_1": 48,
+    "RK1_2": 32,
+    "RK1_3": 48
+   }
+  },
+  "noclip": {
+   "label": "phase at which no sample reaches the largest value",
+   "file": "s32_shadow32_O0_noclipphase_12500.npz",
+   "N": 2048,
+   "samples": 12500,
+   "phase": "noclip (|trace|<=0.47) @try1",
+   "firmware": "shadow32_nop_O0-CWNANO.hex",
+   "version": "shadow32_O0_noclipphase",
+   "rk_round1": "0D 3B 60 33",
+   "round_structure": {
+    "period": 748,
+    "boundary": 361,
+    "round1": [
+     361,
+     1109
+    ],
+    "rounds1to4": [
+     361,
+     3353
+    ]
+   },
+   "amplitude": {
+    "max": 0.27734375,
+    "min": -0.24609375,
+    "frac_at_rail_all": 0.0,
+    "frac_at_rail_rounds1to4": 0.0,
+    "frac_at_rail_round1": 0.0,
+    "traces_with_a_rail_sample": 0,
+    "negative_rail_reached": false
+   },
+   "algorithm1": {
+    "recovered": "0D 3B 60 33 43 60 25 3C 13 25 89 C5 3C 89 0D 5D",
+    "reference": "0D 3B 60 33 43 60 25 3C 13 25 89 C5 3C 89 0D 5D",
+    "matching_bytes": 16,
+    "success": true,
+    "alpha": 1.0,
+    "noise_level": 0.09943689110435824,
+    "decision": {
+     "pair": [
+      13,
+      242
+     ],
+     "p": 13,
+     "P2": 0.47650686749244037,
+     "P2s": 0.08510972408179472,
+     "D": 0.39139714341064563
+    },
+    "round1": {
+     "h0": {
+      "rho_correct": 0.5983475892263486,
+      "sample": 548,
+      "rank256": 1,
+      "best_wrong": 0.5556366216376307,
+      "traces_at_rail_at_peak": 0
+     },
+     "h1": {
+      "rho_correct": 0.6267012594760047,
+      "sample": 709,
+      "rank256": 1,
+      "best_wrong": 0.5465368675350091,
+      "traces_at_rail_at_peak": 0
+     },
+     "h2": {
+      "rho_correct": 0.47650686749244037,
+      "sample": 636,
+      "rank256": 1,
+      "best_wrong": 0.4017198623156911,
+      "traces_at_rail_at_peak": 0
+     },
+     "h3": {
+      "rho_correct": 0.5707293054186016,
+      "sample": 797,
+      "rank256": 1,
+      "best_wrong": 0.4754291899922028,
+      "traces_at_rail_at_peak": 0
+     }
+    },
+    "h2star_max_rho": 0.08510972408179472
+   },
+   "snr_h0": {
+    "class_counts": [
+     3,
+     59,
+     192,
+     465,
+     568,
+     443,
+     250,
+     59,
+     9
+    ],
+    "classes_with_more_than_5_traces": {
+     "classes": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+     ],
+     "max": 1.6588443494795413,
+     "at": 812
+    },
+    "all_classes": {
+     "classes": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+     ],
+     "max": 2.6155975493542867,
+     "at": 493
+    }
+   },
+   "success_rate_round1": [
+    {
+     "N": 16,
+     "subsets": 20,
+     "RK1_0": 2,
+     "RK1_1": 4,
+     "RK1_2": 0,
+     "RK1_3": 0,
+     "pair": 2,
+     "decision": 1,
+     "joint": 0,
+     "joint_signed_peak_rule": 0,
+     "per_subkey_signed_peak_rule": [
+      2,
+      4,
+      0,
+      0
+     ]
+    },
+    {
+     "N": 24,
+     "subsets": 20,
+     "RK1_0": 4,
+     "RK1_1": 3,
+     "RK1_2": 1,
+     "RK1_3": 1,
+     "pair": 4,
+     "decision": 0,
+     "joint": 0,
+     "joint_signed_peak_rule": 0,
+     "per_subkey_signed_peak_rule": [
+      4,
+      3,
+      1,
+      1
+     ]
+    },
+    {
+     "N": 32,
+     "subsets": 20,
+     "RK1_0": 6,
+     "RK1_1": 8,
+     "RK1_2": 4,
+     "RK1_3": 6,
+     "pair": 6,
+     "decision": 2,
+     "joint": 0,
+     "joint_signed_peak_rule": 0,
+     "per_subkey_signed_peak_rule": [
+      6,
+      8,
+      4,
+      6
+     ]
+    },
+    {
+     "N": 48,
+     "subsets": 20,
+     "RK1_0": 12,
+     "RK1_1": 14,
+     "RK1_2": 10,
+     "RK1_3": 10,
+     "pair": 12,
+     "decision": 11,
+     "joint": 3,
+     "joint_signed_peak_rule": 3,
+     "per_subkey_signed_peak_rule": [
+      12,
+      14,
+      10,
+      10
+     ]
+    },
+    {
+     "N": 64,
+     "subsets": 20,
+     "RK1_0": 13,
+     "RK1_1": 14,
+     "RK1_2": 15,
+     "RK1_3": 14,
+     "pair": 13,
+     "decision": 11,
+     "joint": 3,
+     "joint_signed_peak_rule": 3,
+     "per_subkey_signed_peak_rule": [
+      13,
+      14,
+      15,
+      14
+     ]
+    },
+    {
+     "N": 96,
+     "subsets": 20,
+     "RK1_0": 16,
+     "RK1_1": 19,
+     "RK1_2": 17,
+     "RK1_3": 19,
+     "pair": 16,
+     "decision": 16,
+     "joint": 13,
+     "joint_signed_peak_rule": 13,
+     "per_subkey_signed_peak_rule": [
+      16,
+      19,
+      17,
+      19
+     ]
+    },
+    {
+     "N": 128,
+     "subsets": 16,
+     "RK1_0": 15,
+     "RK1_1": 15,
+     "RK1_2": 14,
+     "RK1_3": 16,
+     "pair": 15,
+     "decision": 15,
+     "joint": 13,
+     "joint_signed_peak_rule": 13,
+     "per_subkey_signed_peak_rule": [
+      15,
+      15,
+      14,
+      16
+     ]
+    },
+    {
+     "N": 192,
+     "subsets": 10,
+     "RK1_0": 9,
+     "RK1_1": 9,
+     "RK1_2": 10,
+     "RK1_3": 10,
+     "pair": 9,
+     "decision": 9,
+     "joint": 9,
+     "joint_signed_peak_rule": 9,
+     "per_subkey_signed_peak_rule": [
+      9,
+      9,
+      10,
+      10
+     ]
+    },
+    {
+     "N": 256,
+     "subsets": 8,
+     "RK1_0": 7,
+     "RK1_1": 8,
+     "RK1_2": 7,
+     "RK1_3": 8,
+     "pair": 7,
+     "decision": 7,
+     "joint": 7,
+     "joint_signed_peak_rule": 7,
+     "per_subkey_signed_peak_rule": [
+      7,
+      8,
+      7,
+      8
+     ]
+    },
+    {
+     "N": 384,
+     "subsets": 5,
+     "RK1_0": 5,
+     "RK1_1": 5,
+     "RK1_2": 5,
+     "RK1_3": 5,
+     "pair": 5,
+     "decision": 5,
+     "joint": 5,
+     "joint_signed_peak_rule": 5,
+     "per_subkey_signed_peak_rule": [
+      5,
+      5,
+      5,
+      5
+     ]
+    },
+    {
+     "N": 512,
+     "subsets": 4,
+     "RK1_0": 4,
+     "RK1_1": 4,
+     "RK1_2": 4,
+     "RK1_3": 4,
+     "pair": 4,
+     "decision": 4,
+     "joint": 4,
+     "joint_signed_peak_rule": 4,
+     "per_subkey_signed_peak_rule": [
+      4,
+      4,
+      4,
+      4
+     ]
+    },
+    {
+     "N": 768,
+     "subsets": 2,
+     "RK1_0": 2,
+     "RK1_1": 2,
+     "RK1_2": 2,
+     "RK1_3": 2,
+     "pair": 2,
+     "decision": 2,
+     "joint": 2,
+     "joint_signed_peak_rule": 2,
+     "per_subkey_signed_peak_rule": [
+      2,
+      2,
+      2,
+      2
+     ]
+    },
+    {
+     "N": 1024,
+     "subsets": 2,
+     "RK1_0": 2,
+     "RK1_1": 2,
+     "RK1_2": 2,
+     "RK1_3": 2,
+     "pair": 2,
+     "decision": 2,
+     "joint": 2,
+     "joint_signed_peak_rule": 2,
+     "per_subkey_signed_peak_rule": [
+      2,
+      2,
+      2,
+      2
+     ]
+    },
+    {
+     "N": 2048,
+     "subsets": 1,
+     "RK1_0": 1,
+     "RK1_1": 1,
+     "RK1_2": 1,
+     "RK1_3": 1,
+     "pair": 1,
+     "decision": 1,
+     "joint": 1,
+     "joint_signed_peak_rule": 1,
+     "per_subkey_signed_peak_rule": [
+      1,
+      1,
+      1,
+      1
+     ]
+    }
+   ],
+   "first_N": {
+    "joint": 384,
+    "joint_signed_peak_rule": 384,
+    "decision": 384,
+    "RK1_0": 384,
+    "RK1_1": 256,
+    "RK1_2": 384,
+    "RK1_3": 128
+   }
+  }
+ },
+ "nlist": [
+  16,
+  24,
+  32,
+  48,
+  64,
+  96,
+  128,
+  192,
+  256,
+  384,
+  512,
+  768,
+  1024,
+  2048
+ ],
+ "maxrep": 20,
+ "clip": 0.4959,
+ "pt_and_rk_identical": true,
+ "snr_ratio": {
+  "selected_over_noclip": 7.48890287339418,
+  "fixed_over_noclip": 6.928706935290663,
+  "selected_over_noclip_all": 7.875757519664751,
+  "fixed_over_noclip_all": 6.060087535819101
+ }
+}

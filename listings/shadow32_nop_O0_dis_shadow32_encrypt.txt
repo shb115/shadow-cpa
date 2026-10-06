@@ -1,0 +1,108 @@
+
+shadow32_nop_O0-CWNANO.elf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+080004c2 <shadow32_encrypt>:
+ 80004c2:	b5f0      	push	{r4, r5, r6, r7, lr}
+ 80004c4:	b08b      	sub	sp, #44	@ 0x2c
+ 80004c6:	9007      	str	r0, [sp, #28]
+ 80004c8:	9106      	str	r1, [sp, #24]
+ 80004ca:	9205      	str	r2, [sp, #20]
+ 80004cc:	9b07      	ldr	r3, [sp, #28]
+ 80004ce:	781a      	ldrb	r2, [r3, #0]
+ 80004d0:	2323      	movs	r3, #35	@ 0x23
+ 80004d2:	446b      	add	r3, sp
+ 80004d4:	701a      	strb	r2, [r3, #0]
+ 80004d6:	9b07      	ldr	r3, [sp, #28]
+ 80004d8:	3301      	adds	r3, #1
+ 80004da:	781a      	ldrb	r2, [r3, #0]
+ 80004dc:	2322      	movs	r3, #34	@ 0x22
+ 80004de:	446b      	add	r3, sp
+ 80004e0:	701a      	strb	r2, [r3, #0]
+ 80004e2:	9b07      	ldr	r3, [sp, #28]
+ 80004e4:	3302      	adds	r3, #2
+ 80004e6:	781a      	ldrb	r2, [r3, #0]
+ 80004e8:	2321      	movs	r3, #33	@ 0x21
+ 80004ea:	446b      	add	r3, sp
+ 80004ec:	701a      	strb	r2, [r3, #0]
+ 80004ee:	9b07      	ldr	r3, [sp, #28]
+ 80004f0:	3303      	adds	r3, #3
+ 80004f2:	781a      	ldrb	r2, [r3, #0]
+ 80004f4:	ab08      	add	r3, sp, #32
+ 80004f6:	701a      	strb	r2, [r3, #0]
+ 80004f8:	2300      	movs	r3, #0
+ 80004fa:	9309      	str	r3, [sp, #36]	@ 0x24
+ 80004fc:	e02b      	b.n	8000556 <shadow32_encrypt+0x94>
+ 80004fe:	9b09      	ldr	r3, [sp, #36]	@ 0x24
+ 8000500:	009b      	lsls	r3, r3, #2
+ 8000502:	001a      	movs	r2, r3
+ 8000504:	9b06      	ldr	r3, [sp, #24]
+ 8000506:	189b      	adds	r3, r3, r2
+ 8000508:	781b      	ldrb	r3, [r3, #0]
+ 800050a:	9a09      	ldr	r2, [sp, #36]	@ 0x24
+ 800050c:	0092      	lsls	r2, r2, #2
+ 800050e:	3201      	adds	r2, #1
+ 8000510:	9906      	ldr	r1, [sp, #24]
+ 8000512:	188a      	adds	r2, r1, r2
+ 8000514:	7812      	ldrb	r2, [r2, #0]
+ 8000516:	9909      	ldr	r1, [sp, #36]	@ 0x24
+ 8000518:	0089      	lsls	r1, r1, #2
+ 800051a:	3102      	adds	r1, #2
+ 800051c:	9806      	ldr	r0, [sp, #24]
+ 800051e:	1841      	adds	r1, r0, r1
+ 8000520:	7809      	ldrb	r1, [r1, #0]
+ 8000522:	9809      	ldr	r0, [sp, #36]	@ 0x24
+ 8000524:	0080      	lsls	r0, r0, #2
+ 8000526:	3003      	adds	r0, #3
+ 8000528:	9c06      	ldr	r4, [sp, #24]
+ 800052a:	1820      	adds	r0, r4, r0
+ 800052c:	7800      	ldrb	r0, [r0, #0]
+ 800052e:	af08      	add	r7, sp, #32
+ 8000530:	2621      	movs	r6, #33	@ 0x21
+ 8000532:	446e      	add	r6, sp
+ 8000534:	2522      	movs	r5, #34	@ 0x22
+ 8000536:	446d      	add	r5, sp
+ 8000538:	2423      	movs	r4, #35	@ 0x23
+ 800053a:	446c      	add	r4, sp
+ 800053c:	9003      	str	r0, [sp, #12]
+ 800053e:	9102      	str	r1, [sp, #8]
+ 8000540:	9201      	str	r2, [sp, #4]
+ 8000542:	9300      	str	r3, [sp, #0]
+ 8000544:	003b      	movs	r3, r7
+ 8000546:	0032      	movs	r2, r6
+ 8000548:	0029      	movs	r1, r5
+ 800054a:	0020      	movs	r0, r4
+ 800054c:	f7ff ff10 	bl	8000370 <shadow32_round>
+ 8000550:	9b09      	ldr	r3, [sp, #36]	@ 0x24
+ 8000552:	3301      	adds	r3, #1
+ 8000554:	9309      	str	r3, [sp, #36]	@ 0x24
+ 8000556:	9b09      	ldr	r3, [sp, #36]	@ 0x24
+ 8000558:	2b0f      	cmp	r3, #15
+ 800055a:	ddd0      	ble.n	80004fe <shadow32_encrypt+0x3c>
+ 800055c:	2321      	movs	r3, #33	@ 0x21
+ 800055e:	446b      	add	r3, sp
+ 8000560:	781a      	ldrb	r2, [r3, #0]
+ 8000562:	9b05      	ldr	r3, [sp, #20]
+ 8000564:	701a      	strb	r2, [r3, #0]
+ 8000566:	9b05      	ldr	r3, [sp, #20]
+ 8000568:	3301      	adds	r3, #1
+ 800056a:	2222      	movs	r2, #34	@ 0x22
+ 800056c:	446a      	add	r2, sp
+ 800056e:	7812      	ldrb	r2, [r2, #0]
+ 8000570:	701a      	strb	r2, [r3, #0]
+ 8000572:	9b05      	ldr	r3, [sp, #20]
+ 8000574:	3302      	adds	r3, #2
+ 8000576:	2223      	movs	r2, #35	@ 0x23
+ 8000578:	446a      	add	r2, sp
+ 800057a:	7812      	ldrb	r2, [r2, #0]
+ 800057c:	701a      	strb	r2, [r3, #0]
+ 800057e:	9b05      	ldr	r3, [sp, #20]
+ 8000580:	3303      	adds	r3, #3
+ 8000582:	aa08      	add	r2, sp, #32
+ 8000584:	7812      	ldrb	r2, [r2, #0]
+ 8000586:	701a      	strb	r2, [r3, #0]
+ 8000588:	46c0      	nop			@ (mov r8, r8)
+ 800058a:	b00b      	add	sp, #44	@ 0x2c
+ 800058c:	bdf0      	pop	{r4, r5, r6, r7, pc}

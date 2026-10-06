@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 """
-Shadow-64 전력 파형 그림 (논문 Fig. shadow64-power-trace)
-============================================================================
-대상 : data/shadow64/s64_ref_25000.npz  (4096 x 25000)
-규격 : 노트북(cwnano-shadow32-cpa.ipynb) 의 trace 그림과 동일한 rcParams
+Shadow-64 power-trace figure (Fig. 15 of the paper, fig/shadow64-power-trace.pdf) and the round
+period measured by autocorrelation.
 
-실행 :  python fig_shadow64_trace.py
-출력 :  figures/shadow64/trace.png        전체 25000 샘플
-        figures/shadow64/trace_zoom.png   1라운드 부근 확대
+Data   : data/shadow64/s64_ref_25000.npz (4,096 traces x 25,000 samples); the first trace is drawn.
+Method : the round period is the lag of the largest peak of the autocorrelation of the trace
+         (searched between 400 and 1,200 samples), and 32 x period is compared with the trace
+         length; the figure uses the rcParams of the other trace figures (fig_fixedkey_cpa.py).
+
+Usage :  python fig_shadow64_trace.py
+Output:  figures/shadow64/trace.pdf (+ .png)   the whole trace, 25,000 samples (Fig. 15)
+         figures/shadow64/trace_zoom.png         the first four rounds, for reference
 """
 import os
 import sys
@@ -37,7 +40,7 @@ plt.rcParams.update({
     "xtick.major.pad": 1.5, "ytick.major.pad": 1.5,
     "axes.labelpad": 1.5, "grid.linewidth": 0.35,
     "axes.unicode_minus": False,
-    # 노트북과 동일 : figsize 를 그대로 유지 (bbox='tight' 로 자르지 않는다)
+    # figsize is kept as is (no bbox='tight'), as in the other figures of the paper
     "figure.constrained_layout.use": True,
     "figure.constrained_layout.h_pad": 0.01,
     "figure.constrained_layout.w_pad": 0.01,
@@ -49,25 +52,27 @@ t  = np.asarray(tr[0], np.float64)
 print("traces %s | clkout %.1f MHz | phase %s"
       % (tr.shape, float(d["clkout"]) / 1e6, str(d["phase"])))
 
-# ------------------------------------------------------------------ 라운드 주기
-# 자기상관의 최대 lag 로 라운드 주기를 재고, 32 라운드가 놓인 구간을 확인한다.
+# ------------------------------------------------------------------ round period
+# The lag of the largest autocorrelation peak gives the round period; 32 rounds should fit
+# in the trace.
 x  = t - t.mean()
 ac = np.correlate(x, x, "full")[len(x) - 1:]
 per = 400 + int(np.argmax(ac[400:1200]))
-print("라운드 주기 %d 샘플 -> 32 라운드 = %d 샘플 (전체 %d)"
+print("round period %d samples -> 32 rounds = %d samples (trace length %d)"
       % (per, per * 32, len(t)))
 
-# ------------------------------------------------------------------ 전체 파형
-# 라운드 경계마다 하강 스파이크가 나타나므로 32 라운드가 원파형에서 그대로 보인다.
+# ------------------------------------------------------------------ whole trace
+# A downward spike marks every round boundary, so the 32 rounds are visible in the raw trace.
 plt.figure(figsize=(W_FULL, H_TRACE))
 plt.plot(t, lw=0.3, rasterized=True)
 plt.grid(True, alpha=0.35)
 plt.xlabel("Sample index"); plt.ylabel("Power consumption")
 plt.xlim([0, len(t)])
+plt.savefig(os.path.join(FIG, "trace.pdf"))
 plt.savefig(os.path.join(FIG, "trace.png"), format="png", dpi=DPI)
 plt.close()
 
-# ------------------------------------------------------------------ 앞 4라운드 확대
+# ------------------------------------------------------------------ first four rounds
 n4 = per * 4
 plt.figure(figsize=(W_FULL, H_TRACE))
 plt.plot(t[:n4], lw=0.35, rasterized=True)
@@ -79,4 +84,4 @@ plt.xlim([0, n4])
 plt.savefig(os.path.join(FIG, "trace_zoom.png"), format="png", dpi=DPI)
 plt.close()
 
-print("그림 -> figures/shadow64/trace.png (논문용), trace_zoom.png (참고)")
+print("figures -> figures/shadow64/trace.pdf, trace.png (Fig. 15), trace_zoom.png (reference)")

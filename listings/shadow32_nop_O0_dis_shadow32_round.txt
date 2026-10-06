@@ -1,0 +1,164 @@
+
+shadow32_nop_O0-CWNANO.elf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+08000370 <shadow32_round>:
+ 8000370:	b510      	push	{r4, lr}
+ 8000372:	b086      	sub	sp, #24
+ 8000374:	9003      	str	r0, [sp, #12]
+ 8000376:	9102      	str	r1, [sp, #8]
+ 8000378:	9201      	str	r2, [sp, #4]
+ 800037a:	9300      	str	r3, [sp, #0]
+ 800037c:	9b03      	ldr	r3, [sp, #12]
+ 800037e:	781b      	ldrb	r3, [r3, #0]
+ 8000380:	2101      	movs	r1, #1
+ 8000382:	0018      	movs	r0, r3
+ 8000384:	f7ff ffd8 	bl	8000338 <ROL8>
+ 8000388:	0003      	movs	r3, r0
+ 800038a:	001c      	movs	r4, r3
+ 800038c:	9b03      	ldr	r3, [sp, #12]
+ 800038e:	781b      	ldrb	r3, [r3, #0]
+ 8000390:	2107      	movs	r1, #7
+ 8000392:	0018      	movs	r0, r3
+ 8000394:	f7ff ffd0 	bl	8000338 <ROL8>
+ 8000398:	0003      	movs	r3, r0
+ 800039a:	4023      	ands	r3, r4
+ 800039c:	b2dc      	uxtb	r4, r3
+ 800039e:	9b03      	ldr	r3, [sp, #12]
+ 80003a0:	781b      	ldrb	r3, [r3, #0]
+ 80003a2:	2102      	movs	r1, #2
+ 80003a4:	0018      	movs	r0, r3
+ 80003a6:	f7ff ffc7 	bl	8000338 <ROL8>
+ 80003aa:	0003      	movs	r3, r0
+ 80003ac:	4063      	eors	r3, r4
+ 80003ae:	b2da      	uxtb	r2, r3
+ 80003b0:	9b02      	ldr	r3, [sp, #8]
+ 80003b2:	781b      	ldrb	r3, [r3, #0]
+ 80003b4:	4053      	eors	r3, r2
+ 80003b6:	b2d9      	uxtb	r1, r3
+ 80003b8:	2217      	movs	r2, #23
+ 80003ba:	446a      	add	r2, sp
+ 80003bc:	ab08      	add	r3, sp, #32
+ 80003be:	781b      	ldrb	r3, [r3, #0]
+ 80003c0:	404b      	eors	r3, r1
+ 80003c2:	7013      	strb	r3, [r2, #0]
+ 80003c4:	9b01      	ldr	r3, [sp, #4]
+ 80003c6:	781b      	ldrb	r3, [r3, #0]
+ 80003c8:	2101      	movs	r1, #1
+ 80003ca:	0018      	movs	r0, r3
+ 80003cc:	f7ff ffb4 	bl	8000338 <ROL8>
+ 80003d0:	0003      	movs	r3, r0
+ 80003d2:	001c      	movs	r4, r3
+ 80003d4:	9b01      	ldr	r3, [sp, #4]
+ 80003d6:	781b      	ldrb	r3, [r3, #0]
+ 80003d8:	2107      	movs	r1, #7
+ 80003da:	0018      	movs	r0, r3
+ 80003dc:	f7ff ffac 	bl	8000338 <ROL8>
+ 80003e0:	0003      	movs	r3, r0
+ 80003e2:	4023      	ands	r3, r4
+ 80003e4:	b2dc      	uxtb	r4, r3
+ 80003e6:	9b01      	ldr	r3, [sp, #4]
+ 80003e8:	781b      	ldrb	r3, [r3, #0]
+ 80003ea:	2102      	movs	r1, #2
+ 80003ec:	0018      	movs	r0, r3
+ 80003ee:	f7ff ffa3 	bl	8000338 <ROL8>
+ 80003f2:	0003      	movs	r3, r0
+ 80003f4:	4063      	eors	r3, r4
+ 80003f6:	b2da      	uxtb	r2, r3
+ 80003f8:	9b00      	ldr	r3, [sp, #0]
+ 80003fa:	781b      	ldrb	r3, [r3, #0]
+ 80003fc:	4053      	eors	r3, r2
+ 80003fe:	b2d9      	uxtb	r1, r3
+ 8000400:	2316      	movs	r3, #22
+ 8000402:	446b      	add	r3, sp
+ 8000404:	aa09      	add	r2, sp, #36	@ 0x24
+ 8000406:	7812      	ldrb	r2, [r2, #0]
+ 8000408:	404a      	eors	r2, r1
+ 800040a:	701a      	strb	r2, [r3, #0]
+ 800040c:	2317      	movs	r3, #23
+ 800040e:	446b      	add	r3, sp
+ 8000410:	781b      	ldrb	r3, [r3, #0]
+ 8000412:	2101      	movs	r1, #1
+ 8000414:	0018      	movs	r0, r3
+ 8000416:	f7ff ff8f 	bl	8000338 <ROL8>
+ 800041a:	0003      	movs	r3, r0
+ 800041c:	001c      	movs	r4, r3
+ 800041e:	2317      	movs	r3, #23
+ 8000420:	446b      	add	r3, sp
+ 8000422:	781b      	ldrb	r3, [r3, #0]
+ 8000424:	2107      	movs	r1, #7
+ 8000426:	0018      	movs	r0, r3
+ 8000428:	f7ff ff86 	bl	8000338 <ROL8>
+ 800042c:	0003      	movs	r3, r0
+ 800042e:	4023      	ands	r3, r4
+ 8000430:	b2dc      	uxtb	r4, r3
+ 8000432:	2317      	movs	r3, #23
+ 8000434:	446b      	add	r3, sp
+ 8000436:	781b      	ldrb	r3, [r3, #0]
+ 8000438:	2102      	movs	r1, #2
+ 800043a:	0018      	movs	r0, r3
+ 800043c:	f7ff ff7c 	bl	8000338 <ROL8>
+ 8000440:	0003      	movs	r3, r0
+ 8000442:	4063      	eors	r3, r4
+ 8000444:	b2da      	uxtb	r2, r3
+ 8000446:	9b03      	ldr	r3, [sp, #12]
+ 8000448:	781b      	ldrb	r3, [r3, #0]
+ 800044a:	4053      	eors	r3, r2
+ 800044c:	b2da      	uxtb	r2, r3
+ 800044e:	ab0a      	add	r3, sp, #40	@ 0x28
+ 8000450:	781b      	ldrb	r3, [r3, #0]
+ 8000452:	4053      	eors	r3, r2
+ 8000454:	b2da      	uxtb	r2, r3
+ 8000456:	9b02      	ldr	r3, [sp, #8]
+ 8000458:	701a      	strb	r2, [r3, #0]
+ 800045a:	2316      	movs	r3, #22
+ 800045c:	446b      	add	r3, sp
+ 800045e:	781b      	ldrb	r3, [r3, #0]
+ 8000460:	2101      	movs	r1, #1
+ 8000462:	0018      	movs	r0, r3
+ 8000464:	f7ff ff68 	bl	8000338 <ROL8>
+ 8000468:	0003      	movs	r3, r0
+ 800046a:	001c      	movs	r4, r3
+ 800046c:	2316      	movs	r3, #22
+ 800046e:	446b      	add	r3, sp
+ 8000470:	781b      	ldrb	r3, [r3, #0]
+ 8000472:	2107      	movs	r1, #7
+ 8000474:	0018      	movs	r0, r3
+ 8000476:	f7ff ff5f 	bl	8000338 <ROL8>
+ 800047a:	0003      	movs	r3, r0
+ 800047c:	4023      	ands	r3, r4
+ 800047e:	b2dc      	uxtb	r4, r3
+ 8000480:	2316      	movs	r3, #22
+ 8000482:	446b      	add	r3, sp
+ 8000484:	781b      	ldrb	r3, [r3, #0]
+ 8000486:	2102      	movs	r1, #2
+ 8000488:	0018      	movs	r0, r3
+ 800048a:	f7ff ff55 	bl	8000338 <ROL8>
+ 800048e:	0003      	movs	r3, r0
+ 8000490:	4063      	eors	r3, r4
+ 8000492:	b2da      	uxtb	r2, r3
+ 8000494:	9b01      	ldr	r3, [sp, #4]
+ 8000496:	781b      	ldrb	r3, [r3, #0]
+ 8000498:	4053      	eors	r3, r2
+ 800049a:	b2da      	uxtb	r2, r3
+ 800049c:	ab0b      	add	r3, sp, #44	@ 0x2c
+ 800049e:	781b      	ldrb	r3, [r3, #0]
+ 80004a0:	4053      	eors	r3, r2
+ 80004a2:	b2da      	uxtb	r2, r3
+ 80004a4:	9b00      	ldr	r3, [sp, #0]
+ 80004a6:	701a      	strb	r2, [r3, #0]
+ 80004a8:	9b03      	ldr	r3, [sp, #12]
+ 80004aa:	2216      	movs	r2, #22
+ 80004ac:	446a      	add	r2, sp
+ 80004ae:	7812      	ldrb	r2, [r2, #0]
+ 80004b0:	701a      	strb	r2, [r3, #0]
+ 80004b2:	9b01      	ldr	r3, [sp, #4]
+ 80004b4:	2217      	movs	r2, #23
+ 80004b6:	446a      	add	r2, sp
+ 80004b8:	7812      	ldrb	r2, [r2, #0]
+ 80004ba:	701a      	strb	r2, [r3, #0]
+ 80004bc:	46c0      	nop			@ (mov r8, r8)
+ 80004be:	b006      	add	sp, #24
+ 80004c0:	bd10      	pop	{r4, pc}

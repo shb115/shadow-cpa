@@ -1,0 +1,85 @@
+
+masking_ISWLUT_O0-CWNANO.elf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+0800052c <tableG>:
+ 800052c:	b570      	push	{r4, r5, r6, lr}
+ 800052e:	b086      	sub	sp, #24
+ 8000530:	9003      	str	r0, [sp, #12]
+ 8000532:	9102      	str	r1, [sp, #8]
+ 8000534:	0019      	movs	r1, r3
+ 8000536:	466b      	mov	r3, sp
+ 8000538:	3307      	adds	r3, #7
+ 800053a:	701a      	strb	r2, [r3, #0]
+ 800053c:	466b      	mov	r3, sp
+ 800053e:	3306      	adds	r3, #6
+ 8000540:	1c0a      	adds	r2, r1, #0
+ 8000542:	701a      	strb	r2, [r3, #0]
+ 8000544:	2313      	movs	r3, #19
+ 8000546:	446b      	add	r3, sp
+ 8000548:	9a02      	ldr	r2, [sp, #8]
+ 800054a:	7812      	ldrb	r2, [r2, #0]
+ 800054c:	701a      	strb	r2, [r3, #0]
+ 800054e:	2300      	movs	r3, #0
+ 8000550:	9305      	str	r3, [sp, #20]
+ 8000552:	e018      	b.n	8000586 <tableG+0x5a>
+ 8000554:	9b05      	ldr	r3, [sp, #20]
+ 8000556:	b25a      	sxtb	r2, r3
+ 8000558:	2313      	movs	r3, #19
+ 800055a:	446b      	add	r3, sp
+ 800055c:	781b      	ldrb	r3, [r3, #0]
+ 800055e:	b25b      	sxtb	r3, r3
+ 8000560:	4053      	eors	r3, r2
+ 8000562:	b25b      	sxtb	r3, r3
+ 8000564:	b2db      	uxtb	r3, r3
+ 8000566:	001a      	movs	r2, r3
+ 8000568:	4b16      	ldr	r3, [pc, #88]	@ (80005c4 <tableG+0x98>)
+ 800056a:	5c9a      	ldrb	r2, [r3, r2]
+ 800056c:	466b      	mov	r3, sp
+ 800056e:	3307      	adds	r3, #7
+ 8000570:	781b      	ldrb	r3, [r3, #0]
+ 8000572:	4053      	eors	r3, r2
+ 8000574:	b2d9      	uxtb	r1, r3
+ 8000576:	4a14      	ldr	r2, [pc, #80]	@ (80005c8 <tableG+0x9c>)
+ 8000578:	9b05      	ldr	r3, [sp, #20]
+ 800057a:	18d3      	adds	r3, r2, r3
+ 800057c:	1c0a      	adds	r2, r1, #0
+ 800057e:	701a      	strb	r2, [r3, #0]
+ 8000580:	9b05      	ldr	r3, [sp, #20]
+ 8000582:	3301      	adds	r3, #1
+ 8000584:	9305      	str	r3, [sp, #20]
+ 8000586:	9b05      	ldr	r3, [sp, #20]
+ 8000588:	2bff      	cmp	r3, #255	@ 0xff
+ 800058a:	dde3      	ble.n	8000554 <tableG+0x28>
+ 800058c:	2313      	movs	r3, #19
+ 800058e:	446b      	add	r3, sp
+ 8000590:	466a      	mov	r2, sp
+ 8000592:	3206      	adds	r2, #6
+ 8000594:	7812      	ldrb	r2, [r2, #0]
+ 8000596:	701a      	strb	r2, [r3, #0]
+ 8000598:	9903      	ldr	r1, [sp, #12]
+ 800059a:	9802      	ldr	r0, [sp, #8]
+ 800059c:	466b      	mov	r3, sp
+ 800059e:	3307      	adds	r3, #7
+ 80005a0:	781c      	ldrb	r4, [r3, #0]
+ 80005a2:	466b      	mov	r3, sp
+ 80005a4:	3306      	adds	r3, #6
+ 80005a6:	781d      	ldrb	r5, [r3, #0]
+ 80005a8:	4e07      	ldr	r6, [pc, #28]	@ (80005c8 <tableG+0x9c>)
+ 80005aa:	700c      	strb	r4, [r1, #0]
+ 80005ac:	002a      	movs	r2, r5
+ 80005ae:	002b      	movs	r3, r5
+ 80005b0:	710b      	strb	r3, [r1, #4]
+ 80005b2:	7903      	ldrb	r3, [r0, #4]
+ 80005b4:	5cf3      	ldrb	r3, [r6, r3]
+ 80005b6:	710b      	strb	r3, [r1, #4]
+ 80005b8:	002b      	movs	r3, r5
+ 80005ba:	002a      	movs	r2, r5
+ 80005bc:	46c0      	nop			@ (mov r8, r8)
+ 80005be:	b006      	add	sp, #24
+ 80005c0:	bd70      	pop	{r4, r5, r6, pc}
+ 80005c2:	46c0      	nop			@ (mov r8, r8)
+ 80005c4:	20000014 	.word	0x20000014
+ 80005c8:	20000114 	.word	0x20000114

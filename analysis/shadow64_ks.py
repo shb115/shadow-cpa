@@ -1,3 +1,16 @@
+# -*- coding: utf-8 -*-
+"""
+Shadow-64 key schedule and reference encryption, in the form used by the capture firmware.
+
+`ks64` expands a 16-byte master key into the 128 16-bit round keys (32 rounds x 4 words) and
+`enc64` encrypts one block with them.  Running this file checks `ks64` against the table
+`RK_REF`, the round keys of the reference master key 00 01 02 .. 0F.  The deposited Shadow-64
+traces were acquired with a different master key, 07E9A4B27E3FCB472DA757EA31CAF4ED; the round
+keys of that key are the `rk` field of data/shadow64/s64_ref_25000.npz, and reference/selftest.c
+reproduces them from the key schedule as well.
+
+Usage :  python shadow64_ks.py          (self-test of the key schedule)
+"""
 M16 = 0xFFFF
 
 SHADOW64_PERM = [
@@ -67,10 +80,10 @@ def enc64(pt4, rk):
         l0, r0 = s1, s0
     return [r0, l1, l0, r1]
 
-# 아래 표는 레퍼런스 마스터키 000102..0F 의 라운드키다. 이 파일의 자체검증은
-# 키 스케줄 구현이 맞는지만 확인한다. 공개한 Shadow-64 파형은 다른 마스터키
-# 07E9A4B27E3FCB472DA757EA31CAF4ED 로 수집했으므로, 그 쪽과의 대조는
-# data/shadow64/s64_ref_25000.npz 의 rk 필드로 하면 된다.
+# Round keys of the reference master key 00 01 02 .. 0F.  The self-test below only checks the
+# key-schedule implementation against this table.  The deposited Shadow-64 traces were acquired
+# with the master key 07E9A4B27E3FCB472DA757EA31CAF4ED; compare with the `rk` field of
+# data/shadow64/s64_ref_25000.npz for that key.
 RK_REF = [
 0x0010,0x4056,0x0080,0x7089,0x0008,0x0708,0x000A,0x9000,
 0x4000,0x0900,0x0A4B,0x00C0,0x0064,0xA00C,0x0B0C,0x0030,
@@ -96,11 +109,11 @@ if __name__ == "__main__":
     ref_master = list(range(16))
     rk = ks64(ref_master)
     same = sum(a == b for a, b in zip(rk, RK_REF))
-    print("레퍼런스 마스터키 %s" % " ".join("%02X" % x for x in ref_master))
-    print("키스케줄 출력 rk[0..3] = %s" % " ".join("%04X" % x for x in rk[:4]))
-    print("RK_REF 표     rk[0..3] = %s" % " ".join("%04X" % x for x in RK_REF[:4]))
-    print("128 워드 중 일치 : %d/128  -> %s" % (same, "검증 PASS" if same == 128 else "불일치!"))
+    print("reference master key %s" % " ".join("%02X" % x for x in ref_master))
+    print("key schedule  rk[0..3] = %s" % " ".join("%04X" % x for x in rk[:4]))
+    print("RK_REF table  rk[0..3] = %s" % " ".join("%04X" % x for x in RK_REF[:4]))
+    print("matching words : %d/128  -> %s" % (same, "PASS" if same == 128 else "MISMATCH"))
     if same != 128:
         bad = [i for i in range(128) if rk[i] != RK_REF[i]][:8]
         for i in bad:
-            print("   rk[%3d] 계산 %04X vs baked %04X" % (i, rk[i], RK_REF[i]))
+            print("   rk[%3d] computed %04X vs baked %04X" % (i, rk[i], RK_REF[i]))

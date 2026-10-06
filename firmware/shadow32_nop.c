@@ -1,24 +1,24 @@
 /*
  * shadow32_nop.c
  * ------------------------------------------------------------------
- * Shadow-32 (full 16-round) — ChipWhisperer-Nano(STM32F0/Cortex-M0)
- * CPA 파형 수집용 **단일 자립 펌웨어**.
+ * Shadow-32 (the full 16-round encryption) on the ChipWhisperer-Nano (STM32F030, Cortex-M0):
+ * the single self-contained capture firmware of the unprotected CPA traces.
  *
- * 사이퍼(라운드 함수 / 암호화 / 키스케줄)와 simpleserial 글루가
- * 이 한 파일에 모두 들어 있다. 외부 .c (shadow32.c 등)를 extern/VPATH 로
- * 끌어오지 않는다.  #include 되는 것은 ChipWhisperer 타깃 프레임워크
- * 헤더(hal / simpleserial / aes-independant)뿐이다.
+ * The cipher (round function, encryption, key schedule) and the SimpleSerial glue are all in
+ * this one file; no external .c file (shadow32.c or other) is pulled in through extern or
+ * VPATH. The only #includes are the headers of the ChipWhisperer target framework
+ * (hal, simpleserial, aes-independant).
  *
- * ★ 반드시 -O0 로 빌드할 것 (makefile: OPT = 0).
- *   -O0 는 중간값을 매 연산마다 스택 메모리에 저장 -> 버스의 Hamming-weight
- *   누설이 강해 CPA-HW 피크가 ~0.89 나온다. -O2 는 중간값을 레지스터에 유지해
- *   누설이 약하고 피크가 0.60 으로 떨어진다.
+ * Build at -O0 (makefile: OPT = 0). At -O0 every intermediate value is stored to stack
+ *   memory on each operation, which gives the strong Hamming-weight leakage on the bus that
+ *   the attack targets (correct-key correlation of about 0.9 on the deposited traces). An
+ *   optimized build keeps the intermediate values in registers and is expected to leak less.
  *
- * 커맨드 (SimpleSerial v1.1):
- *   'd' (0바이트) : rk 를 레퍼런스 테이블(RK1 = 0D 3B 60 33 ...)로 리셋   (set#1)
- *   'k' (8바이트) : 8바이트 마스터키 -> 온디바이스 키스케줄 -> rk[64]      (set#2, 다른키)
- *   'p' (4바이트) : 평문 4바이트 풀 사이퍼 암호화(trigger_high..low),
- *                   암호문 4바이트를 16바이트 버퍼에 담아 'r' 로 반환
+ * Commands (SimpleSerial v1.1):
+ *   'd' (0 bytes) : reset rk to the baked reference table (RK1 = 0D 3B 60 33 ...)   (fixed-key set)
+ *   'k' (8 bytes) : 8-byte master key -> on-device key schedule -> rk[64]            (ten-key sets)
+ *   'p' (4 bytes) : full encryption of the 4-byte plaintext (trigger_high .. trigger_low);
+ *                   the 4-byte ciphertext is returned in a 16-byte buffer with 'r'
  * ------------------------------------------------------------------
  */
 #include "aes-independant.h"
@@ -27,7 +27,7 @@
 #include <stdint.h>
 
 /* =====================================================================
- *  Shadow-32 사이퍼 (검증된 구현을 그대로 인라인)
+ *  The Shadow-32 cipher (the verified implementation, inlined as is)
  *  F(x) = (x<<<1 & x<<<7) ^ (x<<<2),  8-bit
  * ===================================================================== */
 static inline uint8_t ROL8(uint8_t val, int rot)
@@ -42,7 +42,7 @@ static const uint8_t SHADOW32_PERM[64] = {
      0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15
 };
 
-/* 1 라운드: 포인터(스택 메모리) 기반 -> -O0 에서 강한 HW 누설 */
+/* One round, through pointers (stack memory): strong Hamming-weight leakage at -O0 */
 static void shadow32_round(uint8_t* l0, uint8_t* l1, uint8_t* r0, uint8_t* r1,
                            uint8_t k0, uint8_t k1, uint8_t k2, uint8_t k3)
 {
@@ -129,12 +129,12 @@ static void shadow32_key_schedule(const uint8_t master[8], uint8_t rk[64])
 }
 
 /* =====================================================================
- *  SimpleSerial 글루
+ *  SimpleSerial glue
  * ===================================================================== */
 
-/* 고정키 세트의 라운드키. 키스케줄을 돌리지 않고 테이블로 baked 한다.
-   RK1 = 0D 3B 60 33. 이 라운드키를 내는 마스터키는 DC4A3DB3035C950E 이며,
-   reference/selftest.c 가 그것으로 이 표를 재현한다. */
+/* The round keys of the fixed-key set, baked in as a table instead of running the key
+   schedule. RK1 = 0D 3B 60 33. A master key that produces these round keys is
+   DC4A3DB3035C950E, with which reference/selftest.c reproduces this table. */
 static const uint8_t RK_DEFAULT[64] = {
     0x0D, 0x3B, 0x60, 0x33, 0x43, 0x60, 0x25, 0x3C,
     0x13, 0x25, 0x89, 0xC5, 0x3C, 0x89, 0x0D, 0x5D,
@@ -146,7 +146,7 @@ static const uint8_t RK_DEFAULT[64] = {
     0x9A, 0x11, 0x00, 0xBC, 0x0B, 0x00, 0x04, 0xCE
 };
 
-static uint8_t rk[64];   /* 현재 라운드키 */
+static uint8_t rk[64];   /* the current round keys */
 
 static void rk_reset(void)
 {
@@ -155,7 +155,7 @@ static void rk_reset(void)
         rk[i] = RK_DEFAULT[i];
 }
 
-/* 'd' : 레퍼런스 라운드키로 리셋 */
+/* 'd' : reset to the reference round keys */
 uint8_t set_default(uint8_t* x, uint8_t len)
 {
     (void)x; (void)len;
@@ -163,7 +163,7 @@ uint8_t set_default(uint8_t* x, uint8_t len)
     return 0x00;
 }
 
-/* 'k' : 8바이트 마스터키 -> 키스케줄 -> rk[64] */
+/* 'k' : 8-byte master key -> key schedule -> rk[64] */
 uint8_t set_key(uint8_t* mk, uint8_t len)
 {
     (void)len;
@@ -171,11 +171,11 @@ uint8_t set_key(uint8_t* mk, uint8_t len)
     return 0x00;
 }
 
-/* 'p' : 4바이트 평문 풀 사이퍼 암호화 (trigger 로 전체 16라운드를 감쌈) */
-/* ===== 캡처 윈도우 뒤쪽을 채우는 NOP 패딩 =====
-   shadow32: 16라운드 11968 cycle + 패딩 -> samples 12500 커버
-   NOP 32개 블록 하나만 코드에 두고 for 문으로 40회 반복한다.
-   (전부 펼쳐 넣으면 코드가 커지고 Thumb PC-상대 오프셋 한계에도 걸린다) */
+/* 'p' : full encryption of the 4-byte plaintext (the trigger spans all 16 rounds) */
+/* ===== NOP padding that fills the rest of the capture window =====
+   Shadow-32: 16 rounds of 11,968 cycles plus the padding cover the 12,500 samples.
+   One block of 32 NOPs is kept in the code and repeated 40 times by a for loop
+   (unrolling it all would enlarge the code and exceed the Thumb pc-relative offset range). */
 #define NOP_BLK_ITER 40
 
 static void __attribute__((noinline)) nop_blk(void)

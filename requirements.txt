@@ -1,17 +1,18 @@
 # Versions used to produce the deposited results.
-# The analysis scripts need only numpy and matplotlib; the notebook adds the rest.
+# The analysis scripts need only numpy and matplotlib.
 
 numpy==1.26.4
 matplotlib==3.5.1
 
-# Notebook only (analysis/cwnano-shadow32-cpa.ipynb)
-jupyter
-ipywidgets
-tqdm
-
-# Acquisition only (capture/capture_exp.py) — also needs a ChipWhisperer-Nano.
+# Acquisition only (capture/capture_exp.py, capture_lab.py, capture_fig1_tbl.py); also
+# needs a ChipWhisperer-Nano. The unprotected sets were acquired with chipwhisperer 5.6.1;
+# the masked and Fig. 1 sets were acquired on a ChipWhisperer-Nano with capture firmware
+# 0.65.0 under Python 3.12 (the package version of that session was not recorded).
 # chipwhisperer==5.6.1
 
-# Python 3.10 was used. Firmware was built with arm-none-eabi-gcc 10.2.1
-# inside the ChipWhisperer 5.6.1 firmware tree. The compiled images are not
-# part of this deposit; rebuild them from firmware/ with those two versions.
+# Python 3.10 was used for the analysis. The compiled images are not part of this
+# deposit; rebuild them from firmware/ inside the ChipWhisperer firmware tree:
+#   unprotected images   arm-none-eabi-gcc 10.2.1, ChipWhisperer 5.6.1 tree
+#   masked images        arm-none-eabi-gcc 15.2.1, ChipWhisperer 6.0.0 tree
+#   Fig. 1 image         arm-none-eabi-gcc 14.2.1, ChipWhisperer 6.0.0 tree
+# (listings/README.md records what a 15.2.1 rebuild reproduces byte for byte).

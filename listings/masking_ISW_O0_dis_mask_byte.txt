@@ -1,0 +1,36 @@
+
+masking_ISW_O0-CWNANO.elf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+08000370 <mask_byte>:
+ 8000370:	b082      	sub	sp, #8
+ 8000372:	9100      	str	r1, [sp, #0]
+ 8000374:	0011      	movs	r1, r2
+ 8000376:	466b      	mov	r3, sp
+ 8000378:	3307      	adds	r3, #7
+ 800037a:	1c02      	adds	r2, r0, #0
+ 800037c:	701a      	strb	r2, [r3, #0]
+ 800037e:	466b      	mov	r3, sp
+ 8000380:	3306      	adds	r3, #6
+ 8000382:	1c0a      	adds	r2, r1, #0
+ 8000384:	701a      	strb	r2, [r3, #0]
+ 8000386:	9b00      	ldr	r3, [sp, #0]
+ 8000388:	466a      	mov	r2, sp
+ 800038a:	3206      	adds	r2, #6
+ 800038c:	7812      	ldrb	r2, [r2, #0]
+ 800038e:	701a      	strb	r2, [r3, #0]
+ 8000390:	466b      	mov	r3, sp
+ 8000392:	1dda      	adds	r2, r3, #7
+ 8000394:	466b      	mov	r3, sp
+ 8000396:	3306      	adds	r3, #6
+ 8000398:	7812      	ldrb	r2, [r2, #0]
+ 800039a:	781b      	ldrb	r3, [r3, #0]
+ 800039c:	4053      	eors	r3, r2
+ 800039e:	b2da      	uxtb	r2, r3
+ 80003a0:	9b00      	ldr	r3, [sp, #0]
+ 80003a2:	705a      	strb	r2, [r3, #1]
+ 80003a4:	46c0      	nop			@ (mov r8, r8)
+ 80003a6:	b002      	add	sp, #8
+ 80003a8:	4770      	bx	lr

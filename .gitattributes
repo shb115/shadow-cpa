@@ -1,0 +1,10 @@
+# Normalize line endings in the repository (the sources were edited on Windows and on Linux).
+* text=auto
+
+# Binary files
+*.npz binary
+*.npy binary
+*.pdf binary
+*.png binary
+*.hex binary
+*.elf binary

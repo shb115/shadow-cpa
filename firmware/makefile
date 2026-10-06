@@ -1,34 +1,44 @@
 # ------------------------------------------------------------------
-# Shadow-32 / Shadow-64 캡처 펌웨어 빌드 (ChipWhisperer-Nano)
+# Build file of the Shadow-32 / Shadow-64 capture firmwares (ChipWhisperer-Nano)
 #
-# 이 makefile 은 ChipWhisperer 펌웨어 트리 안에서 동작한다. 빌드 방법:
-#   1) 빌드할 .c 파일과 이 makefile 을 ChipWhisperer 펌웨어 트리의
-#      <chipwhisperer>/firmware/mcu/ 아래 새 폴더에 복사
-#   2) 아래 TARGET 과 SRC 를 그 파일에 맞게 지정 (단일 자립 파일이라 하나면 됨)
-#        Shadow-32 : TARGET = shadow32_nop       SRC += shadow32_nop.c
-#        Shadow-64 : TARGET = shadow64_newkey    SRC += shadow64_nop_newkey.c
-#        마스킹     : TARGET = masking_ISW       SRC += masking_ISW.c
-#                     (masking_ISWLUT 도 같은 방식)
-#   3) 빌드:
+# This makefile works inside the ChipWhisperer firmware tree. To build an image:
+#   1) copy the .c file to build and this makefile into a new folder under
+#      <chipwhisperer>/firmware/mcu/
+#   2) set TARGET and SRC below to that file (each source is a single self-contained file):
+#        Shadow-32 : TARGET = shadow32_nop        SRC += shadow32_nop.c
+#                    (capture_lab.py looks for the image of the same source built as
+#                     TARGET = shadow32_nop_O0)
+#        Shadow-64 : TARGET = shadow64_newkey     SRC += shadow64_nop_newkey.c
+#        masked    : TARGET = masking_ISW_v2      SRC += masking_ISW.c      (trace acquisition, one round)
+#                    TARGET = masking_ISW_v2_KAT  + EXTRA_OPTS = SHADOW32_KAT  (known-answer test: returns the state after the round)
+#                    TARGET = masking_ISW_v2_FULL + EXTRA_OPTS = SHADOW32_FULL (full 16-round encryption)
+#                    (the same three targets for masking_ISWLUT; capture_lab.py looks for the
+#                     images of these names. The source of masking_ISWLUT.c is revision v3 of the
+#                     file; the target and trace-file names keep masking_ISWLUT_v2.)
+#   3) build:
 #        make PLATFORM=CWNANO CRYPTO_TARGET=TINYAES128C
-#      -> <TARGET>-CWNANO.hex 생성 (예: shadow32_nop-CWNANO.hex)
+#      -> <TARGET>-CWNANO.hex (for example shadow32_nop-CWNANO.hex) together with the
+#         disassembly listing <TARGET>-CWNANO.lss (listings/ in the repository); the default
+#         target of the ChipWhisperer makefile does a full clean and rebuild each time and
+#         writes the .lss as part of it, so no separate `make lss` step is needed (that
+#         target would clean and rebuild again and leave no .hex behind).
 #
-# ★ OPT = 0 (=-O0) 을 반드시 유지할 것.
-#   -O0 는 중간값을 매 연산마다 스택 메모리에 저장 -> 강한 Hamming-weight 누설
-#   -> CPA-HW 피크 ~0.89. -O2/-Os 로 바꾸면 중간값이 레지스터에 남아 누설이
-#   약해지고 피크가 0.60 으로 떨어진다 (파형은 더 깔끔해 보이지만 공격이 약해짐).
+# OPT = 0 (-O0) must be kept. At -O0 every intermediate value is written to stack memory on
+# each operation, which gives the strong Hamming-weight leakage the attack targets and a
+# correct-key correlation of about 0.9 on the deposited traces. An optimized build (-O2 or
+# -Os) keeps intermediate values in registers and is expected to leak less; the paper's
+# figures are those of the -O0 build only.
 #
-# CRYPTO_TARGET=TINYAES128C 는 aes-independant.h 의 KEY_LENGTH/DEFAULT_KEY 와
-# 빈 함수 aes_indep_enc_pre/posttrigger 때문에 필요하다. 사이퍼 자체는 AES 를
-# 전혀 호출하지 않는다.
+# CRYPTO_TARGET=TINYAES128C is needed for KEY_LENGTH / DEFAULT_KEY of aes-independant.h and the
+# empty aes_indep_enc_pre/posttrigger functions. The cipher itself never calls AES.
 # ------------------------------------------------------------------
 
 TARGET = shadow32_nop
 
-# 빌드할 단일 파일 하나만 지정 (extern/VPATH 없이 자립).
+# One self-contained source file (no extern / VPATH).
 SRC += shadow32_nop.c
-# 다른 펌웨어를 빌드할 땐 위 줄을 주석 처리하고 아래 중 하나를 사용
-# (TARGET 도 함께 바꿀 것):
+# To build another firmware, comment out the line above and use one of the following
+# (and change TARGET accordingly):
 # SRC += shadow64_nop_newkey.c
 # SRC += masking_ISW.c
 # SRC += masking_ISWLUT.c
@@ -37,6 +47,8 @@ OPT = 0
 CFLAGS += -fomit-frame-pointer
 
 # -----------------------------------------------------------------------------
+# Variants of the masked firmwares: SHADOW32_KAT (returns the unmasked state after one round),
+# SHADOW32_FULL (full 16-round encryption, 200-byte input). The acquisition image is NO_EXTRA_OPTS.
 EXTRA_OPTS = NO_EXTRA_OPTS
 CFLAGS += -D$(EXTRA_OPTS)
 

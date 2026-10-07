@@ -30,12 +30,12 @@ Both DOIs are concept DOIs and resolve to the latest version of each record.
 
 ## Getting the traces
 
-Download the trace archive of the latest version of the Zenodo record above
-(`shadow-cpa-traces-v2.zip`) and unpack it into the `data/` folder of this repository. The
-files listed under `data/` below are those of that version (the first version,
-https://doi.org/10.5281/zenodo.21721710, holds the unprotected sets and the superseded masked
-sets of the previous version of the paper). The archive holds the subfolders of `data/`
-(`masked/`, `shadow32_fixedkey/`, `shadow32_10keys/`, `shadow64/`, `hwchar/`), so this is all it takes:
+Download the files of the latest version of the Zenodo record above (version 2; its 22 files
+are deposited individually, and the record page also offers them as one download) and place
+each in the subfolder of `data/` given in the table below (`masked/`, `shadow32_fixedkey/`,
+`shadow32_10keys/`, `shadow64/`, `hwchar/`). The files listed under `data/` below are those of
+that version (the first version, https://doi.org/10.5281/zenodo.21721710, holds the unprotected
+sets and the superseded masked sets of the previous version of the paper). The tree then is:
 
 ```
 data/
